@@ -1,2 +1,2 @@
 # App
-flutter app for ncku course fianl project
+flutter app for ncku course final project
