@@ -47,6 +47,19 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.blue[300],
         // on below line we have given title of app
         title: Text("APP"),
+        // icon on app bar
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications_rounded),
+            color: Colors.white,
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.refresh_rounded),
+            color: Colors.white,
+            onPressed: () {},
+          ),
+        ],
       ),
       drawer: Drawer(
         child: ListView(
@@ -92,59 +105,77 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-
-      body: Container(
-        child: SafeArea(
-          // on below line creating google maps
-          child: GoogleMap(
-            // on below line setting camera position
-            initialCameraPosition: _kGoogle,
-            // on below line we are setting markers on the map
-            markers: Set<Marker>.of(_markers),
-            // on below line specifying map type.
-            mapType: MapType.normal,
-            // on below line setting user location enabled.
-            myLocationEnabled: true,
-            // on below line setting compass enabled.
-            compassEnabled: true,
-            // on below line specifying controller on map complete.
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
-          ),
-        ),
-      ),
-
-      // on pressing floating action button the camera will take to user current location
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.my_location),
-        backgroundColor: Colors.blue[300],
-        onPressed: () async {
-          getUserCurrentLocation().then((value) async {
-            print(value.latitude.toString() + " " + value.longitude.toString());
-
-            // marker added for current users location
-            _markers.add(Marker(
-              markerId: MarkerId("1"),
-              position: LatLng(value.latitude, value.longitude),
-              infoWindow: InfoWindow(
-                title: 'Current Location',
+      body: Stack(
+        children: [
+          Container(
+            child: SafeArea(
+              // on below line creating google maps
+              child: GoogleMap(
+                // on below line setting camera position
+                initialCameraPosition: _kGoogle,
+                // on below line we are setting markers on the map
+                markers: Set<Marker>.of(_markers),
+                // on below line specifying map type.
+                mapType: MapType.normal,
+                // on below line setting user location enabled.
+                myLocationEnabled: true,
+                // on below line setting compass enabled.
+                compassEnabled: true,
+                // on below line specifying controller on map complete.
+                onMapCreated: (GoogleMapController controller) {
+                  _controller.complete(controller);
+                },
               ),
-            ));
+            ),
+          ),
 
-            // specified current users location
-            CameraPosition cameraPosition = new CameraPosition(
-              target: LatLng(value.latitude, value.longitude),
-              zoom: 16,
-            );
+          // on pressing floating action button the camera will take to user current location
+          // FloatingActionButtonLocation.centerFloat,
+          Align(
+            alignment: Alignment(0.96, 0.65),
+            child: FloatingActionButton.small(
+              child: Icon(Icons.my_location_rounded),
+              backgroundColor: Colors.blue[300],
+              onPressed: () async {
+                getUserCurrentLocation().then((value) async {
+                  print(value.latitude.toString() +
+                      " " +
+                      value.longitude.toString());
 
-            final GoogleMapController controller = await _controller.future;
-            controller
-                .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-            setState(() {});
-          });
-        },
+                  // marker added for current users location
+                  _markers.add(Marker(
+                    markerId: MarkerId("1"),
+                    position: LatLng(value.latitude, value.longitude),
+                    infoWindow: InfoWindow(
+                      title: 'Current Location',
+                    ),
+                  ));
+
+                  // specified current users location
+                  CameraPosition cameraPosition = new CameraPosition(
+                    target: LatLng(value.latitude, value.longitude),
+                    zoom: 16,
+                  );
+
+                  final GoogleMapController controller =
+                      await _controller.future;
+                  controller.animateCamera(
+                      CameraUpdate.newCameraPosition(cameraPosition));
+                  setState(() {});
+                });
+              },
+            ),
+          ),
+
+          Align(
+            alignment: Alignment(0, 0.9),
+            child: FloatingActionButton(
+              child: Icon(Icons.add_rounded),
+              backgroundColor: Colors.blue[300],
+              onPressed: () {},
+            ),
+          ),
+        ],
       ),
     );
   }
