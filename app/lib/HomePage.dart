@@ -26,7 +26,8 @@ class _HomePageState extends State<HomePage> {
     //     position: LatLng(22.997098289781654, 120.21682909418733),
     //     infoWindow: InfoWindow(
     //       title: 'My Position',
-    //     )),
+    //     )
+    // ),
   ];
 
   // created method for getting user current location
@@ -66,7 +67,7 @@ class _HomePageState extends State<HomePage> {
           padding: EdgeInsets.only(),
           children: <Widget>[
             UserAccountsDrawerHeader(
-              accountName: Text("Rabbit"),
+              accountName: Text("呂亞縉"),
               accountEmail: Text("ilovecarrot@gmail.com"),
               currentAccountPicture: CircleAvatar(
                 backgroundImage: AssetImage('images/rabbit.png'),
@@ -134,8 +135,11 @@ class _HomePageState extends State<HomePage> {
           Align(
             alignment: Alignment(0.96, 0.65),
             child: FloatingActionButton.small(
-              child: Icon(Icons.my_location_rounded),
-              backgroundColor: Colors.blue[300],
+              child: Icon(
+                Icons.my_location_rounded,
+                color: Colors.black45,
+              ),
+              backgroundColor: Colors.white,
               onPressed: () async {
                 getUserCurrentLocation().then((value) async {
                   print(value.latitude.toString() +
