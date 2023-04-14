@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_in_flutter/LoginPage.dart';
+import 'LoginPage.dart';
+import 'ActivityPage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -66,42 +69,74 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           padding: EdgeInsets.only(),
           children: <Widget>[
+            // 之後從後端拿資料
             UserAccountsDrawerHeader(
               accountName: Text("呂亞縉"),
-              accountEmail: Text("ilovecarrot@gmail.com"),
+              accountEmail: Text("UU@gmail.com"),
               currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('images/rabbit.png'),
+                backgroundImage: AssetImage('images/ya.jpg'),
               ),
             ),
+
             ListTile(
               title: Text("User"),
               leading: Icon(Icons.person, color: Theme.of(context).accentColor),
               onTap: () {},
             ),
-            ListTile(
-              leading: Icon(Icons.inbox, color: Theme.of(context).accentColor),
-              title: const Text('Inbox'),
-              trailing: Text("99+"),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.star, color: Theme.of(context).accentColor),
-              title: const Text('Starred'),
-              trailing: Text("3"),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.schedule_send,
+
+            ExpansionTile(
+              title: Text('娛樂'),
+              leading: Icon(Icons.sports_esports_rounded,
                   color: Theme.of(context).accentColor),
-              title: const Text('Scheduled'),
-              trailing: Text("1"),
-              onTap: () {},
+              children: <Widget>[
+                ListTile(title: Text('桌遊')),
+                ListTile(title: Text('麻將')),
+                ListTile(title: Text('KTV')),
+                ListTile(title: Text('看球賽')),
+                ListTile(title: Text('音樂祭')),
+                ListTile(title: Text('密室逃脫')),
+              ],
             ),
-            ListTile(
-              title: Text("logout"),
-              leading:
-                  Icon(Icons.exit_to_app, color: Theme.of(context).accentColor),
-              onTap: () {},
+
+            ExpansionTile(
+              title: Text('運動'),
+              leading: Icon(Icons.sports_rounded,
+                  color: Theme.of(context).accentColor),
+              children: <Widget>[
+                ListTile(title: Text('籃球')),
+                ListTile(title: Text('排球')),
+                ListTile(title: Text('羽球')),
+                ListTile(title: Text('網球')),
+                ListTile(title: Text('足球')),
+                ListTile(title: Text('撞球')),
+                ListTile(title: Text('保齡球')),
+              ],
+            ),
+
+            ExpansionTile(
+              title: Text('飲食'),
+              leading: Icon(Icons.fastfood_rounded,
+                  color: Theme.of(context).accentColor),
+              children: <Widget>[
+                ListTile(title: Text('覺得寂寞')),
+                ListTile(title: Text('團購食材')),
+                ListTile(title: Text('校內剩餘便當')),
+              ],
+            ),
+
+            Expanded(
+              child: Align(
+                alignment: FractionalOffset(0.5, 1.0),
+                child: ListTile(
+                  title: Text("logout"),
+                  leading: Icon(Icons.exit_to_app,
+                      color: Theme.of(context).accentColor),
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => LoginPage()));
+                  },
+                ),
+              ),
             ),
           ],
         ),
@@ -176,7 +211,12 @@ class _HomePageState extends State<HomePage> {
             child: FloatingActionButton(
               child: Icon(Icons.add_rounded),
               backgroundColor: Colors.blue[300],
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Activity()),
+                );
+              },
             ),
           ),
         ],
