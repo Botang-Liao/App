@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_in_flutter/LoginPage.dart';
+import 'Userinfo.dart';
 import 'LoginPage.dart';
 import 'ActivityPage.dart';
 
@@ -15,6 +16,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late Future<User> futureUser;
+
+  @override
+  void initState() {
+    super.initState();
+    futureUser = fetchUser();
+  }
+
   Completer<GoogleMapController> _controller = Completer();
   // on below line we have specified camera position
   static final CameraPosition _kGoogle = const CameraPosition(
@@ -70,12 +79,26 @@ class _HomePageState extends State<HomePage> {
           padding: EdgeInsets.only(),
           children: <Widget>[
             // 之後從後端拿資料
-            UserAccountsDrawerHeader(
-              accountName: Text("呂亞縉"),
-              accountEmail: Text("UU@gmail.com"),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('images/ya.jpg'),
+            DrawerHeader(
+              padding: EdgeInsets.all(0),
+              child: FutureBuilder<User>(
+                future: futureUser,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Text(snapshot.data!.username);
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
+
+                  // By default, show a loading spinner.
+                  return const CircularProgressIndicator();
+                },
               ),
+              // accountName: Text("呂亞縉"),
+              // accountEmail: Text("UU@gmail.com"),
+              // currentAccountPicture: CircleAvatar(
+              //   backgroundImage: AssetImage('images/ya.jpg'),
+              // ),
             ),
 
             ListTile(
