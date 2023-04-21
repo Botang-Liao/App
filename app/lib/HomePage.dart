@@ -55,6 +55,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    String name;
+    String email;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[300],
