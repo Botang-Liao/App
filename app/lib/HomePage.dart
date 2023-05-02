@@ -1,4 +1,3 @@
-//Google Map
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -7,6 +6,7 @@ import 'package:google_maps_in_flutter/LoginPage.dart';
 import 'Userinfo.dart';
 import 'LoginPage.dart';
 import 'ActivityPage.dart';
+import 'LogoutAuth.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -158,6 +158,7 @@ class _HomePageState extends State<HomePage> {
                   leading: Icon(Icons.exit_to_app,
                       color: Theme.of(context).accentColor),
                   onTap: () {
+                    Logout();
                     Navigator.push(context,
                         MaterialPageRoute(builder: (_) => LoginPage()));
                   },

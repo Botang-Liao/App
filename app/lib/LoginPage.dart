@@ -1,6 +1,14 @@
+import 'dart:html';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'HomePage.dart';
 import 'SignupPage.dart';
+
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+// import 'package:cookie_jar/cookie_jar.dart';
+import 'package:dio/dio.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -10,6 +18,83 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  void Login(String email, password) async {
+    try {
+      final url = 'https://nckudagg.ddns.net/api/auth/login';
+
+      var data = {'email': email, 'password': password};
+
+      final response = await Dio().post(url,
+          data: data,
+          options: Options(headers: {'Content-Type': 'application/json'}));
+
+      if (response.statusCode == 200) {
+        if (response.data.isNotEmpty) {
+          print(response.data);
+          print('Login successfully');
+          // Navigator.pop(
+          //     context, MaterialPageRoute(builder: (_) => HomePage()));
+        }
+      } else if (response.statusCode == 401) {
+        print('Unauthorized');
+      } else {
+        print(response.statusCode);
+        print('failed');
+      }
+
+      var cookies = response.headers['set-cookie'];
+      print(response.headers);
+      print(cookies);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+// class _LoginPageState extends State<LoginPage> {
+//   final _formKey = GlobalKey<FormState>();
+//   // final _scrollController = ScrollController();
+//   TextEditingController emailController = TextEditingController();
+//   TextEditingController passwordController = TextEditingController();
+
+//   void Login(String email, password) async {
+//     try {
+//       final url = Uri.parse('https://nckudagg.ddns.net/api/auth/login');
+
+//       var bodyyy = jsonEncode({
+//         'email': email,
+//         'password': password,
+//       });
+
+//       final response = await http.post(url,
+//           headers: {'Content-Type': 'application/json'}, body: bodyyy);
+
+//       if (response.statusCode == 200) {
+//         if (response.body.isNotEmpty) {
+//           var data = jsonDecode(response.body.toString());
+//           print(data);
+//           print('Login successfully');
+//           // Navigator.pop(
+//           //     context, MaterialPageRoute(builder: (_) => HomePage()));
+//         }
+//       } else if (response.statusCode == 401) {
+//         print('Unauthorized');
+//       } else {
+//         print(response.statusCode);
+//         print('failed');
+//       }
+
+//       // var cookies = response.headers['set-cookie'];
+//       print(response.headers.keys.toList());
+//       print(response.headers.values.toList());
+//     } catch (e) {
+//       print(e.toString());
+//     }
+//   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,82 +103,108 @@ class _LoginPageState extends State<LoginPage> {
           // title: Text(""),
           ),
       body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 60.0),
-              child: Center(
-                child: Container(
-                  width: 200,
-                  height: 150,
-                  /*decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(50.0)),*/
-                  // child: Image.asset('') //可以放個logo?
+        // controller: _scrollController,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 60.0),
+                child: Center(
+                  child: Container(
+                    width: 200,
+                    height: 150,
+                    /*decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(50.0)),*/
+                    // child: Image.asset('') //可以放個logo?
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
-              padding: EdgeInsets.symmetric(horizontal: 15),
-              child: TextField(
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Email',
-                    hintText: 'Enter valid email id as abc@gmail.com'),
+              Padding(
+                //padding: const EdgeInsets.only(left:15.0,right: 15.0,top:0,bottom: 0),
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: TextFormField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Email',
+                      hintText: 'Enter valid email id as abc@gmail.com'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the email';
+                    }
+                    // } else if (!value.contains('@')) {
+                    //   return 'Please enter the valid email format';
+                    // }
+                    return null;
+                  },
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 15.0, right: 15.0, top: 15, bottom: 0),
-              //padding: EdgeInsets.symmetric(horizontal: 15),
-              child: TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Password',
-                    hintText: 'Enter secure password'),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 15.0, right: 15.0, top: 15, bottom: 0),
+                //padding: EdgeInsets.symmetric(horizontal: 15),
+                child: TextFormField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Password',
+                      hintText: 'Enter secure password'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the password';
+                    }
+                    return null;
+                  },
+                ),
               ),
-            ),
-            TextButton(
-              onPressed: () {
-                //TODO FORGOT PASSWORD SCREEN GOES HERE
-              },
-              child: Text(
-                'Forgot Password',
-                style: TextStyle(color: Colors.blue, fontSize: 15),
-              ),
-            ),
-            Container(
-              height: 50,
-              width: 250,
-              decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(20)),
-              child: TextButton(
+              TextButton(
                 onPressed: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => HomePage()));
+                  //TODO FORGOT PASSWORD SCREEN GOES HERE
                 },
                 child: Text(
-                  'Login',
-                  style: TextStyle(color: Colors.white, fontSize: 25),
+                  '',
+                  style: TextStyle(color: Colors.blue, fontSize: 15),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 130,
-            ),
-            TextButton(
-              child: Text(
-                'New User? Create Account',
-                style: TextStyle(color: Colors.blue, fontSize: 15),
+              Container(
+                height: 50,
+                width: 250,
+                decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(20)),
+                child: TextButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      Login(emailController.text.toString(),
+                          passwordController.text.toString());
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => HomePage()));
+                    }
+                  },
+                  child: Text(
+                    'Login',
+                    style: TextStyle(color: Colors.white, fontSize: 25),
+                  ),
+                ),
               ),
-              onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (_) => SignUpScreen()));
-              },
-            ),
-          ],
+              SizedBox(
+                height: 130,
+              ),
+              TextButton(
+                child: Text(
+                  'New User? Create Account',
+                  style: TextStyle(color: Colors.blue, fontSize: 15),
+                ),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => SignUpScreen()));
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

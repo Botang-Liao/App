@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'HomePage.dart';
+import 'LoginPage.dart';
 
 import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -20,22 +19,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   void Signup(String email, username, password) async {
     try {
-      Response response = await post(
-          Uri.parse('http://nckudagg.ddns.net/api/auth/signup/'),
-          body: {
-            'email': email,
-            'username': username,
-            'password': password,
-          });
+      final url = Uri.parse('https://nckudagg.ddns.net/api/auth/signup');
+      var bodyyy = jsonEncode({
+        'email': email,
+        'username': username,
+        'password': password,
+      });
+      final response = await http.post(url,
+          headers: {'Content-Type': 'application/json'}, body: bodyyy);
 
       if (response.statusCode == 200) {
-        var data = jsonDecode(response.body.toString());
-        print(data['token']);
-        print('Signup successfully');
+        if (response.body.isNotEmpty) {
+          var data = jsonDecode(response.body.toString());
+          print(data);
+          print('Signup successfully');
+          Navigator.pop(
+              context, MaterialPageRoute(builder: (_) => LoginPage()));
+        }
       } else if (response.statusCode == 400) {
         print('Bad Request');
       } else if (response.statusCode == 403) {
         print('Forbidden');
+        print('Account already exists');
       } else {
         print(response.statusCode);
         print('failed');
@@ -44,6 +49,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
       print(e.toString());
     }
   }
+
+  // void Signup(String email, username, password) async {
+  //   try {
+  //     final url = Uri.parse('https://nckudagg.ddns.net/api/auth/signup');
+  //     final response = await http.post(url, body: {
+  //       'email': email,
+  //       'username': username,
+  //       'password': password,
+  //     });
+  //     // Response response = await post(
+  //     //     Uri.parse('https://nckudagg.ddns.net/api/auth/signup'),
+  //     //     body: {
+  //     //       'email': email,
+  //     //       'username': username,
+  //     //       'password': password,
+  //     //     });
+
+  //     if (response.statusCode == 200) {
+  //       var data = jsonDecode(response.body.toString());
+  //       print(data['token']);
+  //       print('Signup successfully');
+  //     } else if (response.statusCode == 400) {
+  //       print('Bad Request');
+  //     } else if (response.statusCode == 403) {
+  //       print('Forbidden');
+  //     } else {
+  //       print(response.statusCode);
+  //       print('failed');
+  //     }
+  //   } catch (e) {
+  //     print(e.toString());
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +123,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     emailController.text.toString(),
                     usernameController.text.toString(),
                     passwordController.text.toString());
+                // SnackBar(
+                //   content: const Text(),
+                //   action: SnackBarAction(
+                //     label: 'Undo',
+                //     onPressed: () {
+                //       // Some code to undo the change.
+                //     },
+                //   ),
+                // );
               },
               child: Container(
                 height: 50,
