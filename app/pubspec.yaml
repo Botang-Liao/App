@@ -21,6 +21,7 @@ dependencies:
   cookie_jar: ^4.0.2
   axios: ^0.0.1
   dio_cookie_manager: ^3.0.0
+  shelf_proxy: ^1.0.2
 
 
 dev_dependencies:

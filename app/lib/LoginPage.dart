@@ -6,9 +6,9 @@ import 'HomePage.dart';
 import 'SignupPage.dart';
 
 import 'dart:convert';
-import 'package:http/http.dart' as http;
-// import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:cookie_jar/cookie_jar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -25,11 +25,14 @@ class _LoginPageState extends State<LoginPage> {
   void Login(String email, password) async {
     try {
       final url = 'https://nckudagg.ddns.net/api/auth/login';
-
       var data = {'email': email, 'password': password};
 
-      final response = await Dio().post(url,
-          data: data,
+      var cookieJar = CookieJar();
+      var dio = Dio();
+      dio.interceptors.add(CookieManager(cookieJar));
+
+      final response = await dio.post(url,
+          data: jsonEncode(data),
           options: Options(headers: {'Content-Type': 'application/json'}));
 
       if (response.statusCode == 200) {
