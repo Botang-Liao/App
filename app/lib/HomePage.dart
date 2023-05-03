@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_in_flutter/LoginPage.dart';
 import 'Userinfo.dart';
 import 'LoginPage.dart';
-import 'ActivityPage.dart';
+import 'PickActPage.dart';
 import 'LogoutAuth.dart';
 
 class HomePage extends StatefulWidget {
@@ -240,7 +240,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Activity()),
+                  MaterialPageRoute(builder: (context) => PickActPage()),
                 );
               },
             ),

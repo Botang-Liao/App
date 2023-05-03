@@ -1,36 +1,34 @@
 import 'package:flutter/material.dart';
-import 'CreateActPage.dart';
+import 'ActivityFunc/Sports.dart';
+import 'ActivityFunc/Food.dart';
+import 'ActivityFunc/Fun.dart';
 
-class Activity extends StatefulWidget {
-  const Activity({Key? key}) : super(key: key);
+class PickActPage extends StatefulWidget {
+  const PickActPage({Key? key}) : super(key: key);
 
   @override
-  _ActivityState createState() => _ActivityState();
+  _PickActPageState createState() => _PickActPageState();
 }
 
-class _ActivityState extends State<Activity> {
+class _PickActPageState extends State<PickActPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue[300],
-        title: Text(
-          "",
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Color.fromRGBO(0, 0, 0, 1),
-          ),
-        ),
-      ),
+      //appBar: AppBar(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              "選擇活動類別",
+              "New Activity",
               style:
-                  TextStyle(color: Color.fromARGB(255, 7, 1, 0), fontSize: 30),
+                  TextStyle(color: Color.fromARGB(255, 7, 1, 0), fontSize: 50),
+            ),
+            const SizedBox(height: 30),
+            const Text(
+              "Please select activity type",
+              style:
+                  TextStyle(color: Color.fromARGB(255, 7, 1, 0), fontSize: 20),
             ),
             const SizedBox(height: 80),
             ElevatedButton(
@@ -43,19 +41,19 @@ class _ActivityState extends State<Activity> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.sports_esports_rounded), //deck),
+                  Icon(Icons.sports_esports_rounded),
                   SizedBox(width: 20),
-                  Text("娛樂"),
+                  Text("Fun"),
                 ],
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 61, 237, 234),
+                //backgroundColor: Color.fromRGBO(61, 237, 234, 1),
                 minimumSize: Size(300, 100),
                 maximumSize: Size(1200, 200),
                 textStyle: TextStyle(fontSize: 30, color: Colors.black),
               ),
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -68,11 +66,11 @@ class _ActivityState extends State<Activity> {
                 children: [
                   Icon(Icons.sports_rounded),
                   SizedBox(width: 10),
-                  Text("運動"),
+                  Text("Sports"),
                 ],
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 241, 111, 245),
+                //backgroundColor: Color.fromARGB(255, 241, 111, 245),
                 minimumSize: Size(300, 100),
                 maximumSize: Size(1200, 200),
                 textStyle: TextStyle(
@@ -80,7 +78,7 @@ class _ActivityState extends State<Activity> {
                 ),
               ),
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -91,13 +89,13 @@ class _ActivityState extends State<Activity> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.fastfood_rounded), //food_bank),
+                  Icon(Icons.fastfood_rounded),
                   SizedBox(width: 10),
-                  Text("飲食"),
+                  Text("Food"),
                 ],
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(33, 240, 125, 159),
+                //backgroundColor: Color.fromARGB(239, 235, 238, 73),
                 minimumSize: Size(300, 100),
                 maximumSize: Size(1200, 200),
                 textStyle: TextStyle(
