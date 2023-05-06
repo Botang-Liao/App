@@ -27,9 +27,9 @@ class _LoginPageState extends State<LoginPage> {
       final url = 'https://nckudagg.ddns.net/api/auth/login';
       var data = {'email': email, 'password': password};
 
-      var cookieJar = CookieJar();
+      // var cookieJar = CookieJar();
       var dio = Dio();
-      dio.interceptors.add(CookieManager(cookieJar));
+      // dio.interceptors.add(CookieManager(cookieJar));
 
       final response = await dio.post(url,
           data: jsonEncode(data),
@@ -39,8 +39,6 @@ class _LoginPageState extends State<LoginPage> {
         if (response.data.isNotEmpty) {
           print(response.data);
           print('Login successfully');
-          // Navigator.pop(
-          //     context, MaterialPageRoute(builder: (_) => HomePage()));
         }
       } else if (response.statusCode == 401) {
         print('Unauthorized');
@@ -183,8 +181,10 @@ class _LoginPageState extends State<LoginPage> {
                     if (_formKey.currentState!.validate()) {
                       Login(emailController.text.toString(),
                           passwordController.text.toString());
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => HomePage()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => HomePage(key: homePageKey)));
                     }
                   },
                   child: Text(

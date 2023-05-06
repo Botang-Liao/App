@@ -23,6 +23,10 @@ dependencies:
   dio_cookie_manager: ^3.0.0
   shelf_proxy: ^1.0.2
   intl: ^0.18.1
+  flutter_google_places: ^0.3.0
+  flutter_geocoder: ^0.2.2-nullsafety
+  search_map_place_updated: ^0.0.4
+  uuid: ^3.0.7
 
 
 dev_dependencies:

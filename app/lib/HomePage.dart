@@ -15,7 +15,11 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+GlobalKey<_HomePageState> homePageKey = GlobalKey<_HomePageState>();
+
 class _HomePageState extends State<HomePage> {
+  final Set<Marker> _markers = {};
+
   late Future<User> futureUser;
 
   @override
@@ -32,15 +36,15 @@ class _HomePageState extends State<HomePage> {
   );
 
   // on below line we have created the list of markers
-  final List<Marker> _markers = <Marker>[
-    // Marker(
-    //     markerId: MarkerId('1'),
-    //     position: LatLng(22.997098289781654, 120.21682909418733),
-    //     infoWindow: InfoWindow(
-    //       title: 'My Position',
-    //     )
-    // ),
-  ];
+  // final List<Marker> _markers = <Marker>[
+  //   // Marker(
+  //   //     markerId: MarkerId('1'),
+  //   //     position: LatLng(22.997098289781654, 120.21682909418733),
+  //   //     infoWindow: InfoWindow(
+  //   //       title: 'My Position',
+  //   //     )
+  //   // ),
+  // ];
 
   // created method for getting user current location
   Future<Position> getUserCurrentLocation() async {
@@ -51,6 +55,16 @@ class _HomePageState extends State<HomePage> {
       print("ERROR" + error.toString());
     });
     return await Geolocator.getCurrentPosition();
+  }
+
+  void addMarker(double latitude, double longitude, String ActName) {
+    setState(() {
+      _markers.add(Marker(
+        markerId: MarkerId(ActName),
+        position: LatLng(latitude, longitude),
+        infoWindow: InfoWindow(title: ActName),
+      ));
+    });
   }
 
   @override
@@ -82,26 +96,26 @@ class _HomePageState extends State<HomePage> {
           padding: EdgeInsets.only(),
           children: <Widget>[
             // 之後從後端拿資料
-            DrawerHeader(
-              padding: EdgeInsets.all(0),
-              child: FutureBuilder<User>(
-                future: futureUser,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Text(snapshot.data!.username);
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
+            UserAccountsDrawerHeader(
+              // padding: EdgeInsets.all(0),
+              // child: FutureBuilder<User>(
+              //   future: futureUser,
+              //   builder: (context, snapshot) {
+              //     if (snapshot.hasData) {
+              //       return Text(snapshot.data!.username);
+              //     } else if (snapshot.hasError) {
+              //       return Text('${snapshot.error}');
+              //     }
 
-                  // By default, show a loading spinner.
-                  return const CircularProgressIndicator();
-                },
-              ),
-              // accountName: Text("呂亞縉"),
-              // accountEmail: Text("UU@gmail.com"),
-              // currentAccountPicture: CircleAvatar(
-              //   backgroundImage: AssetImage('images/ya.jpg'),
+              //     // By default, show a loading spinner.
+              //     return const CircularProgressIndicator();
+              //   },
               // ),
+              accountName: Text("呂亞縉"),
+              accountEmail: Text("UU@gmail.com"),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: AssetImage('images/ya.jpg'),
+              ),
             ),
 
             ListTile(
