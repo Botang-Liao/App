@@ -40,3 +40,5 @@ flutter:
   assets:
     - assets/locations.json
     - assets/images/ya.jpg
+    - assets/images/cur_loc_icon.png
+    

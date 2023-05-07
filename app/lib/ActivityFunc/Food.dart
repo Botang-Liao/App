@@ -6,7 +6,7 @@ import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'SumitFunc.dart';
+import 'SubmitFunc.dart';
 import '/HomePage.dart';
 
 class FoodBank extends StatefulWidget {
@@ -451,7 +451,16 @@ class _FoodBankState extends State<FoodBank> {
                       Latitude,
                       Longitude);
                   homePageKey.currentState?.addMarker(
-                      Latitude, Longitude, ActivityName.text.toString());
+                      ActivityName.text.toString(),
+                      EndInviteTime.text.toString(),
+                      StartTime.text.toString(),
+                      ActivityLoca.text.toString(),
+                      PeopleLimit.toString(),
+                      LowerEstimatedCost.text.toString(),
+                      UpperEstimatedCost.text.toString(),
+                      Note.text.toString(),
+                      Latitude,
+                      Longitude);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
