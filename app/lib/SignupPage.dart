@@ -88,7 +88,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sign Up'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.green[200],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -136,7 +136,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               child: Container(
                 height: 50,
                 decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: Colors.green[200],
                     borderRadius: BorderRadius.circular(10)),
                 child: Center(
                   child: Text(

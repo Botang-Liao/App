@@ -2,11 +2,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_in_flutter/drawerpage.dart';
 import 'Userinfo.dart';
 import 'LoginPage.dart';
 import 'PickActPage.dart';
 import 'LogoutAuth.dart';
-import 'package:google_maps_in_flutter/ActivityFunc/SubmitFunc.dart';
+import 'ActivityFunc/SubmitFunc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,14 +23,25 @@ class _HomePageState extends State<HomePage> {
 
   late Future<User> futureUser;
 
+  String mapStyle = '';
+
+  final Completer<GoogleMapController> _controller = Completer();
+
   @override
   void initState() {
-    addCustomIcon();
-    super.initState();
+    addCurIcon();
+    addFunIcon();
+    addSportIcon();
+    addFoodIcon();
     futureUser = fetchUser();
+    super.initState();
+    DefaultAssetBundle.of(context).loadString('mapstyle.txt').then((string) {
+      mapStyle = string;
+    }).catchError((error) {
+      print("error" + error.toString());
+    });
   }
 
-  Completer<GoogleMapController> _controller = Completer();
   // on below line we have specified camera position
   static final CameraPosition _kGoogle = const CameraPosition(
     target: LatLng(22.997098289781654, 120.21682909418733),
@@ -59,13 +71,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   // add marker from activity
-  void addMarker(ActName, EndInviteTime, StartTime, ActLoca, PeopleLimit,
+  void addFunMarker(ActName, EndInviteTime, StartTime, ActLoca, PeopleLimit,
       LowerEstCost, UpperEstCost, Note, latitude, longitude) {
     setState(() {
       _markers.add(Marker(
         markerId: MarkerId(ActName),
         position: LatLng(latitude, longitude),
         infoWindow: InfoWindow(title: ActName),
+        icon: Fun_markerIcon,
         onTap: () {
           showModalBottomSheet(
             context: context,
@@ -73,7 +86,7 @@ class _HomePageState extends State<HomePage> {
               return Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Container(
-                  height: 500.0,
+                  height: 600.0,
                   color: Colors.white,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -131,21 +144,174 @@ class _HomePageState extends State<HomePage> {
                           Navigator.pop(context);
                         },
                       ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ));
+    });
+  }
 
-                      // Container(
-                      //   height: 40,
-                      //   width: 100,
-                      //   decoration: BoxDecoration(
-                      //       color: Colors.blue,
-                      //       borderRadius: BorderRadius.circular(15)),
-                      //   child: TextButton(
-                      //     onPressed: () {},
-                      //     child: Text(
-                      //       'Join!',
-                      //       style: TextStyle(color: Colors.white, fontSize: 15),
-                      //     ),
-                      //   ),
-                      // )
+  void addSportMarker(ActName, EndInviteTime, StartTime, ActLoca, PeopleLimit,
+      LowerEstCost, UpperEstCost, Note, latitude, longitude) {
+    setState(() {
+      _markers.add(Marker(
+        markerId: MarkerId(ActName),
+        position: LatLng(latitude, longitude),
+        infoWindow: InfoWindow(title: ActName),
+        icon: Sport_markerIcon,
+        onTap: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Container(
+                  height: 600.0,
+                  color: Colors.white,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "$ActName",
+                        style: TextStyle(color: Colors.black, fontSize: 35),
+                      ),
+                      const SizedBox(height: 25),
+                      Text(
+                        "Distance: xxx m",
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                      ),
+                      const SizedBox(height: 15),
+                      Text(
+                        "Organizer: 呂亞縉",
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                      ),
+                      const SizedBox(height: 15),
+                      Text(
+                        "Remaining time: xxx min",
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                      ),
+                      const SizedBox(height: 15),
+                      Text(
+                        "Fee: NTD $LowerEstCost ~ NTD $UpperEstCost",
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                      ),
+                      const SizedBox(height: 15),
+                      Text(
+                        "Address: $ActLoca",
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                      ),
+                      const SizedBox(height: 15),
+                      Text(
+                        "Remaining: xxx min to start activities",
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                      ),
+                      const SizedBox(height: 15),
+                      Text(
+                        "Note: $Note",
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                      ),
+                      const SizedBox(height: 25),
+                      OutlinedButton.icon(
+                        style: ButtonStyle(
+                          textStyle: MaterialStateProperty.all<TextStyle>(
+                            TextStyle(color: Colors.black54),
+                          ),
+                        ),
+                        label: Text('Join'),
+                        icon: const Icon(Icons.add, size: 18),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ));
+    });
+  }
+
+  void addFoodMarker(ActName, EndInviteTime, StartTime, ActLoca, PeopleLimit,
+      LowerEstCost, UpperEstCost, Note, latitude, longitude) {
+    setState(() {
+      _markers.add(Marker(
+        markerId: MarkerId(ActName),
+        position: LatLng(latitude, longitude),
+        infoWindow: InfoWindow(title: ActName),
+        icon: Food_markerIcon,
+        onTap: () {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Container(
+                  height: 600.0,
+                  color: Colors.white,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "$ActName",
+                        style: TextStyle(color: Colors.black, fontSize: 35),
+                      ),
+                      const SizedBox(height: 25),
+                      Text(
+                        "Distance: xxx m",
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                      ),
+                      const SizedBox(height: 15),
+                      Text(
+                        "Organizer: 呂亞縉",
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                      ),
+                      const SizedBox(height: 15),
+                      Text(
+                        "Remaining time: xxx min",
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                      ),
+                      const SizedBox(height: 15),
+                      Text(
+                        "Fee: NTD $LowerEstCost ~ NTD $UpperEstCost",
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                      ),
+                      const SizedBox(height: 15),
+                      Text(
+                        "Address: $ActLoca",
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                      ),
+                      const SizedBox(height: 15),
+                      Text(
+                        "Remaining: xxx min to start activities",
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                      ),
+                      const SizedBox(height: 15),
+                      Text(
+                        "Note: $Note",
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                      ),
+                      const SizedBox(height: 25),
+                      OutlinedButton.icon(
+                        style: ButtonStyle(
+                          textStyle: MaterialStateProperty.all<TextStyle>(
+                            TextStyle(color: Colors.black54),
+                          ),
+                        ),
+                        label: Text('Join'),
+                        icon: const Icon(Icons.add, size: 18),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -158,15 +324,54 @@ class _HomePageState extends State<HomePage> {
   }
 
   //change marker icon
-  BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor cur_markerIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor Fun_markerIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor Sport_markerIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor Food_markerIcon = BitmapDescriptor.defaultMarker;
 
-  void addCustomIcon() {
+  void addCurIcon() {
     BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(), "assets/images/cur_loc_icon.png")
+            const ImageConfiguration(), "images/cur.png")
         .then(
       (icon) {
         setState(() {
-          markerIcon = icon;
+          cur_markerIcon = icon;
+        });
+      },
+    );
+  }
+
+  void addFunIcon() {
+    BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(), "images/Fun.png")
+        .then(
+      (icon) {
+        setState(() {
+          Fun_markerIcon = icon;
+        });
+      },
+    );
+  }
+
+  void addSportIcon() {
+    BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(), "images/Sport.png")
+        .then(
+      (icon) {
+        setState(() {
+          Sport_markerIcon = icon;
+        });
+      },
+    );
+  }
+
+  void addFoodIcon() {
+    BitmapDescriptor.fromAssetImage(
+            const ImageConfiguration(), "images/Food.png")
+        .then(
+      (icon) {
+        setState(() {
+          Food_markerIcon = icon;
         });
       },
     );
@@ -179,19 +384,20 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue[300],
+        iconTheme: IconThemeData(color: Colors.black87),
+        backgroundColor: Colors.white,
         // on below line we have given title of app
-        title: Text("APP"),
+        // title: Text("APP"),
         // icon on app bar
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_rounded),
-            color: Colors.white,
+            color: Colors.black87,
             onPressed: () {},
           ),
           IconButton(
             icon: const Icon(Icons.refresh_rounded),
-            color: Colors.white,
+            color: Colors.black87,
             onPressed: () {},
           ),
         ],
@@ -248,7 +454,13 @@ class _HomePageState extends State<HomePage> {
               leading: Icon(Icons.sports_rounded,
                   color: Theme.of(context).accentColor),
               children: <Widget>[
-                ListTile(title: Text('Basketball')),
+                ListTile(
+                  title: Text('Basketball'),
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (_) => DrawerPage()));
+                  },
+                ),
                 ListTile(title: Text('Tennis')),
                 ListTile(title: Text('Balling')),
                 ListTile(title: Text('Badminton')),
@@ -304,6 +516,7 @@ class _HomePageState extends State<HomePage> {
                 compassEnabled: true,
                 // on below line specifying controller on map complete.
                 onMapCreated: (GoogleMapController controller) {
+                  controller.setMapStyle(mapStyle);
                   _controller.complete(controller);
                 },
               ),
@@ -317,9 +530,9 @@ class _HomePageState extends State<HomePage> {
             child: FloatingActionButton.small(
               child: Icon(
                 Icons.my_location_rounded,
-                color: Colors.black45,
+                color: Colors.white,
               ),
-              backgroundColor: Colors.white,
+              backgroundColor: Colors.black87,
               onPressed: () async {
                 getUserCurrentLocation().then((value) async {
                   print(value.latitude.toString() +
@@ -333,7 +546,7 @@ class _HomePageState extends State<HomePage> {
                     infoWindow: InfoWindow(
                       title: 'Current Location',
                     ),
-                    icon: markerIcon, // add custom icon style
+                    icon: cur_markerIcon, // add custom icon style
                   ));
 
                   // specified current users location
@@ -353,10 +566,13 @@ class _HomePageState extends State<HomePage> {
           ),
 
           Align(
-            alignment: Alignment(0, 0.9),
-            child: FloatingActionButton(
-              child: Icon(Icons.add_rounded),
-              backgroundColor: Colors.blue[300],
+            alignment: Alignment(0.96, 0.5),
+            child: FloatingActionButton.small(
+              child: Icon(
+                Icons.add_rounded,
+                color: Colors.white,
+              ),
+              backgroundColor: Colors.black87,
               onPressed: () {
                 Navigator.push(
                   context,

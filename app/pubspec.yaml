@@ -27,6 +27,7 @@ dependencies:
   flutter_geocoder: ^0.2.2-nullsafety
   search_map_place_updated: ^0.0.4
   uuid: ^3.0.7
+  page_transition: ^2.0.9
 
 
 dev_dependencies:
@@ -39,6 +40,13 @@ flutter:
   uses-material-design: true
   assets:
     - assets/locations.json
+    - assets/mapstyle.txt
+    - assets/mapstyle.json
     - assets/images/ya.jpg
     - assets/images/cur_loc_icon.png
-    
+    - assets/images/cur.png
+    - assets/images/Fun.png
+    - assets/images/Sport.png
+    - assets/images/Food.png
+    - assets/images/logo.jpg
+        

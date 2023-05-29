@@ -143,6 +143,8 @@ class _DeckState extends State<Deck> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black87),
+        backgroundColor: Colors.white,
         title: const Text('Fun'),
       ),
       body: Padding(
@@ -257,56 +259,62 @@ class _DeckState extends State<Deck> {
 
             //活動地點
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            SizedBox(width: 15, height: 10),
-            SizedBox(
-              height: 40,
-              child: TextFormField(
-                controller: ActivityLoca,
-                focusNode: _focusNode,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search),
-                  label: Text("Activity Location"),
-                  border: OutlineInputBorder(),
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    _isListVisible = true;
-                  });
-                },
+            SingleChildScrollView(
+              clipBehavior: Clip.none,
+              child: Column(
+                children: [
+                  SizedBox(width: 15, height: 10),
+                  SizedBox(
+                    height: 40,
+                    child: TextFormField(
+                      controller: ActivityLoca,
+                      focusNode: _focusNode,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        label: Text("Activity Location"),
+                        border: OutlineInputBorder(),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          _isListVisible = true;
+                        });
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: _isListVisible,
+                    child: ListView.builder(
+                      physics: ScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: _placeList.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(_placeList[index]["description"]),
+                          onTap: () async {
+                            print(_placeList[index]["description"]);
+                            ActivityLoca.text =
+                                _placeList[index]["description"];
+                            setState(() {
+                              _isListVisible = false;
+                            });
+                            _focusNode.unfocus();
+
+                            var placeId = _placeList[index]['place_id'];
+                            var latLng = await getLatLng(placeId);
+                            print(
+                                'Latitude: ${latLng.latitude}, Longitude: ${latLng.longitude}');
+                            Latitude = latLng.latitude;
+                            Longitude = latLng.longitude;
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-
-            Visibility(
-              visible: _isListVisible,
-              child: ListView.builder(
-                physics: ScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: _placeList.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(_placeList[index]["description"]),
-                    onTap: () async {
-                      print(_placeList[index]["description"]);
-                      ActivityLoca.text = _placeList[index]["description"];
-                      setState(() {
-                        _isListVisible = false;
-                      });
-                      _focusNode.unfocus();
-
-                      var placeId = _placeList[index]['place_id'];
-                      var latLng = await getLatLng(placeId);
-                      print(
-                          'Latitude: ${latLng.latitude}, Longitude: ${latLng.longitude}');
-                      Latitude = latLng.latitude;
-                      Longitude = latLng.longitude;
-                    },
-                  );
-                },
-              ),
-            ),
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             const SizedBox(height: 15),
             //人數點選
@@ -320,6 +328,7 @@ class _DeckState extends State<Deck> {
                 ),
                 Radio<String>(
                   value: "1",
+                  activeColor: Colors.black87,
                   groupValue: radioValue,
                   onChanged: (value) {
                     PeopleLimit = value.toString();
@@ -332,6 +341,7 @@ class _DeckState extends State<Deck> {
                 ////////////////////////////////////////
                 Radio<String>(
                   value: "2",
+                  activeColor: Colors.black87,
                   groupValue: radioValue,
                   onChanged: (value) {
                     PeopleLimit = value.toString();
@@ -344,6 +354,7 @@ class _DeckState extends State<Deck> {
                 ///////////////////////////////////////
                 Radio<String>(
                   value: "3",
+                  activeColor: Colors.black87,
                   groupValue: radioValue,
                   onChanged: (value) {
                     setState(() {
@@ -433,47 +444,49 @@ class _DeckState extends State<Deck> {
               ),
             ),
             //發起按鈕
-
-            Container(
-              height: 40,
-              width: 100,
-              decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(15)),
-              child: TextButton(
-                onPressed: () {
-                  Submit(
+            Center(
+              child: Container(
+                height: 40,
+                width: 100,
+                decoration: BoxDecoration(
+                    color: Colors.black87,
+                    borderRadius: BorderRadius.circular(15)),
+                child: TextButton(
+                  onPressed: () {
+                    Submit(
+                        context,
+                        ActivityName.text.toString(),
+                        EndInviteTime.text.toString(),
+                        StartTime.text.toString(),
+                        ActivityLoca.text.toString(),
+                        PeopleLimit.toString(),
+                        LowerEstimatedCost.text.toString(),
+                        UpperEstimatedCost.text.toString(),
+                        Note.text.toString(),
+                        Latitude,
+                        Longitude);
+                    homePageKey.currentState?.addFunMarker(
+                        ActivityName.text.toString(),
+                        EndInviteTime.text.toString(),
+                        StartTime.text.toString(),
+                        ActivityLoca.text.toString(),
+                        PeopleLimit.toString(),
+                        LowerEstimatedCost.text.toString(),
+                        UpperEstimatedCost.text.toString(),
+                        Note.text.toString(),
+                        Latitude,
+                        Longitude);
+                    Navigator.push(
                       context,
-                      ActivityName.text.toString(),
-                      EndInviteTime.text.toString(),
-                      StartTime.text.toString(),
-                      ActivityLoca.text.toString(),
-                      PeopleLimit.toString(),
-                      LowerEstimatedCost.text.toString(),
-                      UpperEstimatedCost.text.toString(),
-                      Note.text.toString(),
-                      Latitude,
-                      Longitude);
-                  homePageKey.currentState?.addMarker(
-                      ActivityName.text.toString(),
-                      EndInviteTime.text.toString(),
-                      StartTime.text.toString(),
-                      ActivityLoca.text.toString(),
-                      PeopleLimit.toString(),
-                      LowerEstimatedCost.text.toString(),
-                      UpperEstimatedCost.text.toString(),
-                      Note.text.toString(),
-                      Latitude,
-                      Longitude);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomePage(key: homePageKey),
-                    ),
-                  );
-                },
-                child: Text(
-                  'Submit',
-                  style: TextStyle(color: Colors.white, fontSize: 15),
+                      MaterialPageRoute(
+                        builder: (context) => HomePage(key: homePageKey),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                  ),
                 ),
               ),
             ),

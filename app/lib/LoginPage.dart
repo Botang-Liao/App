@@ -22,11 +22,10 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  void Login(String email, password) async {
+  Future<void> Login(String email, password) async {
     try {
       final url = 'https://nckudagg.ddns.net/api/auth/login';
       var data = {'email': email, 'password': password};
-
       // var cookieJar = CookieJar();
       var dio = Dio();
       // dio.interceptors.add(CookieManager(cookieJar));
@@ -100,9 +99,9 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-          // title: Text(""),
-          ),
+      // appBar: AppBar(
+      //     // title: Text(""),
+      //     ),
       body: SingleChildScrollView(
         // controller: _scrollController,
         child: Form(
@@ -110,16 +109,21 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(top: 60.0),
+                padding: const EdgeInsets.only(top: 150.0),
                 child: Center(
                   child: Container(
-                    width: 200,
-                    height: 150,
-                    /*decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(50.0)),*/
-                    // child: Image.asset('') //可以放個logo?
-                  ),
+                      width: 200,
+                      height: 200,
+                      // decoration: BoxDecoration(
+                      //     color: Colors.red,
+                      //     borderRadius: BorderRadius.circular(50.0)),
+                      child: Image.asset(
+                        'images/logo.jpg',
+                        width: 200,
+                        height: 200,
+                        fit: BoxFit.cover,
+                      ) //放logo
+                      ),
                 ),
               ),
               Padding(
@@ -128,14 +132,20 @@ class _LoginPageState extends State<LoginPage> {
                 child: TextFormField(
                   controller: emailController,
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            width: 2,
+                            color: Color.fromRGBO(
+                                165, 214, 167, 1)), //<-- SEE HERE
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
                       labelText: 'Email',
                       hintText: 'Enter valid email id as abc@gmail.com'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter the email';
                     }
-                    // } else if (!value.contains('@')) {
+                    // else if (!value.contains('@')) {
                     //   return 'Please enter the valid email format';
                     // }
                     return null;
@@ -144,13 +154,19 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Padding(
                 padding: const EdgeInsets.only(
-                    left: 15.0, right: 15.0, top: 15, bottom: 0),
+                    left: 15.0, right: 15.0, top: 15.0, bottom: 20.0),
                 //padding: EdgeInsets.symmetric(horizontal: 15),
                 child: TextFormField(
                   controller: passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            width: 2,
+                            color: Color.fromRGBO(
+                                165, 214, 167, 1)), //<-- SEE HERE
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
                       labelText: 'Password',
                       hintText: 'Enter secure password'),
                   validator: (value) {
@@ -161,25 +177,26 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 ),
               ),
-              TextButton(
-                onPressed: () {
-                  //TODO FORGOT PASSWORD SCREEN GOES HERE
-                },
-                child: Text(
-                  '',
-                  style: TextStyle(color: Colors.blue, fontSize: 15),
-                ),
-              ),
+              // TextButton(
+              //   onPressed: () {
+              //     //TODO FORGOT PASSWORD SCREEN GOES HERE
+              //   },
+              //   child: Text(
+              //     '',
+              //     style: TextStyle(color: Colors.blue, fontSize: 15),
+              //   ),
+              // ),
+
               Container(
                 height: 50,
                 width: 250,
                 decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: Colors.green[200],
                     borderRadius: BorderRadius.circular(20)),
                 child: TextButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      Login(emailController.text.toString(),
+                      await Login(emailController.text.toString(),
                           passwordController.text.toString());
                       Navigator.push(
                           context,
@@ -199,7 +216,7 @@ class _LoginPageState extends State<LoginPage> {
               TextButton(
                 child: Text(
                   'New User? Create Account',
-                  style: TextStyle(color: Colors.blue, fontSize: 15),
+                  style: TextStyle(color: Colors.green[200], fontSize: 15),
                 ),
                 onPressed: () {
                   Navigator.push(context,
