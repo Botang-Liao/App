@@ -20,14 +20,14 @@ class _StartPageState extends State<StartPage> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(top: 150.0),
+                padding: const EdgeInsets.only(top: 180.0),
                 child: Center(
                   child: Container(
                       alignment: Alignment.center,
                       width: 300,
                       height: 300,
                       child: Image.asset(
-                        'images/logo.jpg',
+                        'assets/images/logo.jpg',
                         width: 300,
                         height: 300,
                         fit: BoxFit.cover,

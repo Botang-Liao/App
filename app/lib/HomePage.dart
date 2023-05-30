@@ -35,7 +35,9 @@ class _HomePageState extends State<HomePage> {
     addFoodIcon();
     futureUser = fetchUser();
     super.initState();
-    DefaultAssetBundle.of(context).loadString('mapstyle.txt').then((string) {
+    DefaultAssetBundle.of(context)
+        .loadString('assets/mapstyle.txt')
+        .then((string) {
       mapStyle = string;
     }).catchError((error) {
       print("error" + error.toString());
@@ -331,7 +333,7 @@ class _HomePageState extends State<HomePage> {
 
   void addCurIcon() {
     BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(), "images/cur.png")
+            const ImageConfiguration(), "assets/images/cur.png")
         .then(
       (icon) {
         setState(() {
@@ -343,7 +345,7 @@ class _HomePageState extends State<HomePage> {
 
   void addFunIcon() {
     BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(), "images/Fun.png")
+            const ImageConfiguration(), "assets/images/Fun.png")
         .then(
       (icon) {
         setState(() {
@@ -355,7 +357,7 @@ class _HomePageState extends State<HomePage> {
 
   void addSportIcon() {
     BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(), "images/Sport.png")
+            const ImageConfiguration(), "assets/images/Sport.png")
         .then(
       (icon) {
         setState(() {
@@ -367,7 +369,7 @@ class _HomePageState extends State<HomePage> {
 
   void addFoodIcon() {
     BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(), "images/Food.png")
+            const ImageConfiguration(), "assets/images/Food.png")
         .then(
       (icon) {
         setState(() {
@@ -383,6 +385,7 @@ class _HomePageState extends State<HomePage> {
     String email;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black87),
         backgroundColor: Colors.white,
@@ -405,28 +408,38 @@ class _HomePageState extends State<HomePage> {
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.only(),
-          children: <Widget>[
+          children: [
             // 之後從後端拿資料
-            UserAccountsDrawerHeader(
-              // padding: EdgeInsets.all(0),
-              // child: FutureBuilder<User>(
-              //   future: futureUser,
-              //   builder: (context, snapshot) {
-              //     if (snapshot.hasData) {
-              //       return Text(snapshot.data!.username);
-              //     } else if (snapshot.hasError) {
-              //       return Text('${snapshot.error}');
-              //     }
+            DrawerHeader(
+              padding: EdgeInsets.all(0),
+              child: FutureBuilder<User>(
+                future: futureUser,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    // return Text(snapshot.data!.username);
+                    return UserAccountsDrawerHeader(
+                      accountName: Text(snapshot.data!.username,
+                          style: TextStyle(fontSize: 20)),
+                      accountEmail: Text(snapshot.data!.email,
+                          style: TextStyle(fontSize: 18)),
+                      currentAccountPicture: CircleAvatar(
+                        backgroundImage: AssetImage('assets/images/ya.jpg'),
+                      ),
+                      currentAccountPictureSize: Size.fromRadius(35),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
 
-              //     // By default, show a loading spinner.
-              //     return const CircularProgressIndicator();
-              //   },
-              // ),
-              accountName: Text("呂亞縉"),
-              accountEmail: Text("UU@gmail.com"),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('images/ya.jpg'),
+                  // By default, show a loading spinner.
+                  return const CircularProgressIndicator();
+                },
               ),
+              // accountName: Text("呂亞縉"),
+              // accountEmail: Text("UU@gmail.com"),
+              // currentAccountPicture: CircleAvatar(
+              //   backgroundImage: AssetImage('assets/images/ya.jpg'),
+              // ),
             ),
 
             ListTile(

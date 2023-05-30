@@ -1,4 +1,4 @@
-import 'dart:html';
+// import 'dart:html';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -109,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(top: 150.0),
+                padding: const EdgeInsets.only(top: 180.0),
                 child: Center(
                   child: Container(
                       width: 200,
@@ -118,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                       //     color: Colors.red,
                       //     borderRadius: BorderRadius.circular(50.0)),
                       child: Image.asset(
-                        'images/logo.jpg',
+                        'assets/images/logo.jpg',
                         width: 200,
                         height: 200,
                         fit: BoxFit.cover,
@@ -154,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Padding(
                 padding: const EdgeInsets.only(
-                    left: 15.0, right: 15.0, top: 15.0, bottom: 20.0),
+                    left: 15.0, right: 15.0, top: 20.0, bottom: 20.0),
                 //padding: EdgeInsets.symmetric(horizontal: 15),
                 child: TextFormField(
                   controller: passwordController,

@@ -142,13 +142,14 @@ class _FoodBankState extends State<FoodBank> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black87),
         backgroundColor: Colors.white,
         title: const Text('Food'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(30.0), //調整介面內容與邊線距離
+        padding: const EdgeInsets.all(25.0), //調整介面內容與邊線距離
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,7 +159,7 @@ class _FoodBankState extends State<FoodBank> {
               style:
                   TextStyle(color: Color.fromARGB(255, 10, 1, 0), fontSize: 35),
             ),
-            const SizedBox(height: 25),
+            const SizedBox(height: 20),
             //下拉式選單
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -210,7 +211,7 @@ class _FoodBankState extends State<FoodBank> {
             ),
 
             SizedBox(
-              width: 20,
+              width: 18,
             ),
 
             TextFormField(
@@ -228,7 +229,7 @@ class _FoodBankState extends State<FoodBank> {
 
             SizedBox(
               width: 15,
-              height: 15,
+              height: 18,
             ),
             //活動開始時間
             const Text(
@@ -256,14 +257,13 @@ class _FoodBankState extends State<FoodBank> {
 
             //活動地點
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
             SingleChildScrollView(
               clipBehavior: Clip.none,
               child: Column(
                 children: [
                   SizedBox(width: 15, height: 10),
                   SizedBox(
-                    height: 40,
+                    height: 45,
                     child: TextFormField(
                       controller: ActivityLoca,
                       focusNode: _focusNode,
@@ -272,7 +272,7 @@ class _FoodBankState extends State<FoodBank> {
                         label: Text("Activity Location"),
                         border: OutlineInputBorder(),
                         contentPadding:
-                            EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                            EdgeInsets.symmetric(vertical: 12, horizontal: 15),
                       ),
                       onChanged: (value) {
                         setState(() {
@@ -364,11 +364,11 @@ class _FoodBankState extends State<FoodBank> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 4,
                   child: SizedBox(
-                    height: 30,
+                    height: 32,
                     child: TextFormField(
                       controller: PeopleLimitcontroller,
                       decoration: InputDecoration(
-                        label: Text("People Limit"),
+                        label: Text("Limit"),
                         border: OutlineInputBorder(),
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 10, horizontal: 15), // <-- SEE HERE
@@ -385,7 +385,7 @@ class _FoodBankState extends State<FoodBank> {
               ],
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             //預算花費
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -399,7 +399,7 @@ class _FoodBankState extends State<FoodBank> {
                         controller: LowerEstimatedCost,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.attach_money),
-                          label: Text("Estimated Cost"),
+                          label: Text("Lower Cost"),
                           border: OutlineInputBorder(),
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 10, horizontal: 15), // <-- SEE HERE //
@@ -418,7 +418,7 @@ class _FoodBankState extends State<FoodBank> {
                         controller: UpperEstimatedCost,
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.attach_money),
-                          label: Text("Estimated Cost"),
+                          label: Text("Upper Cost"),
                           border: OutlineInputBorder(),
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 10, horizontal: 15), // <-- SEE HERE //

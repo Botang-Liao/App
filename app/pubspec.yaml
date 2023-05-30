@@ -49,4 +49,6 @@ flutter:
     - assets/images/Sport.png
     - assets/images/Food.png
     - assets/images/logo.jpg
-        
+
+android:
+  useAndroidX: true

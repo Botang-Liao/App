@@ -1,9 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.google_maps_in_flutter">
+   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+   <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+   <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="google_maps_in_flutter"
+        android:label="HobHub"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/hobhub">
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyC5iwslr5cnM7LG6pQcMsxqHLLojrfjm-c"/>
         <activity
@@ -32,10 +36,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-        <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
-        <uses-permission android:name="android.permission.INTERNET"/>
+        
 
     </application>
 </manifest>

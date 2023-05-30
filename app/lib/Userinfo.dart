@@ -17,17 +17,17 @@ Future<User> fetchUser() async {
 }
 
 class User {
-  final int uid;
+  final double? uid;
   final String email;
   final String username;
-  final String picture_path;
+  final String? picture_path;
   final int verified;
-  final String education;
-  final String about;
-  final String language;
-  final String other_info;
-  final int score;
-  final DateTime last_edit;
+  final String? education;
+  final String? about;
+  final String? language;
+  final String? other_info;
+  final double? score;
+  final int last_edit;
 
   const User({
     required this.uid,
