@@ -5,7 +5,9 @@ import 'ActivityFunc/Fun.dart';
 import 'HomePage.dart';
 
 class PickActPage extends StatefulWidget {
-  const PickActPage({Key? key}) : super(key: key);
+  final String cookies;
+
+  const PickActPage({Key? key, required this.cookies}) : super(key: key);
 
   @override
   _PickActPageState createState() => _PickActPageState();
@@ -44,7 +46,10 @@ class _PickActPageState extends State<PickActPage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Deck()),
+                  MaterialPageRoute(
+                      builder: (context) => Fun(
+                            cookies: widget.cookies,
+                          )),
                 );
               },
               child: Row(
@@ -75,7 +80,10 @@ class _PickActPageState extends State<PickActPage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Sports()),
+                  MaterialPageRoute(
+                      builder: (context) => Sports(
+                            cookies: widget.cookies,
+                          )),
                 );
               },
               child: Row(
@@ -106,7 +114,10 @@ class _PickActPageState extends State<PickActPage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => FoodBank()),
+                  MaterialPageRoute(
+                      builder: (context) => Food(
+                            cookies: widget.cookies,
+                          )),
                 );
               },
               child: Row(

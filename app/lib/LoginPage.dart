@@ -21,14 +21,15 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  var cookies;
 
   Future<void> Login(String email, password) async {
     try {
       final url = 'https://nckudagg.ddns.net/api/auth/login';
       var data = {'email': email, 'password': password};
-      // var cookieJar = CookieJar();
+      var cookieJar = CookieJar();
       var dio = Dio();
-      // dio.interceptors.add(CookieManager(cookieJar));
+      dio.interceptors.add(CookieManager(cookieJar));
 
       final response = await dio.post(url,
           data: jsonEncode(data),
@@ -46,8 +47,9 @@ class _LoginPageState extends State<LoginPage> {
         print('failed');
       }
 
-      var cookies = response.headers['set-cookie'];
+      cookies = response.headers['set-cookie'];
       print(response.headers);
+      print('////////////////////');
       print(cookies);
     } catch (e) {
       print(e.toString());
@@ -201,7 +203,7 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) => HomePage(key: homePageKey)));
+                              builder: (_) => HomePage(key: homePageKey, cookies: cookies,)));
                     }
                   },
                   child: Text(

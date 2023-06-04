@@ -10,7 +10,9 @@ import 'LogoutAuth.dart';
 import 'ActivityFunc/SubmitFunc.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final String cookies;
+
+  const HomePage({Key? key, required this.cookies}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -33,7 +35,7 @@ class _HomePageState extends State<HomePage> {
     addFunIcon();
     addSportIcon();
     addFoodIcon();
-    futureUser = fetchUser();
+    futureUser = fetchUser(widget.cookies);
     super.initState();
     DefaultAssetBundle.of(context)
         .loadString('assets/mapstyle.txt')
@@ -588,9 +590,11 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: Colors.black87,
               onPressed: () {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PickActPage()),
-                );
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => PickActPage(
+                              cookies: widget.cookies,
+                            )));
               },
             ),
           ),

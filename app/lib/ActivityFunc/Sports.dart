@@ -10,6 +10,10 @@ import 'SubmitFunc.dart';
 import '/HomePage.dart';
 
 class Sports extends StatefulWidget {
+  final String cookies;
+
+  const Sports({Key? key, required this.cookies}) : super(key: key);
+
   @override
   _SportsState createState() => _SportsState();
 }
@@ -480,7 +484,10 @@ class _SportsState extends State<Sports> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => HomePage(key: homePageKey),
+                        builder: (context) => HomePage(
+                          key: homePageKey,
+                          cookies: widget.cookies,
+                        ),
                       ),
                     );
                   },

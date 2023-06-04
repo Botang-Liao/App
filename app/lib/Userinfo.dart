@@ -4,9 +4,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-Future<User> fetchUser() async {
+Future<User> fetchUser(cookies) async {
   final response =
-      await http.get(Uri.parse('http://nckudagg.ddns.net/api/user/get-info'));
+      await http.get(Uri.parse('http://nckudagg.ddns.net/api/user/get-info'), headers: {'Cookie': cookies});
   if (response.statusCode == 200) {
     return User.fromJson(json.decode(response.body));
   } else if (response.statusCode == 401) {

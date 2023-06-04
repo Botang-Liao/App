@@ -9,12 +9,16 @@ import 'dart:convert';
 import 'SubmitFunc.dart';
 import '/HomePage.dart';
 
-class FoodBank extends StatefulWidget {
+class Food extends StatefulWidget {
+  final String cookies;
+
+  const Food({Key? key, required this.cookies}) : super(key: key);
+
   @override
-  _FoodBankState createState() => _FoodBankState();
+  _FoodState createState() => _FoodState();
 }
 
-class _FoodBankState extends State<FoodBank> {
+class _FoodState extends State<Food> {
   //選擇人數變數
   String? radioValue = '1';
   final nameController = TextEditingController();
@@ -477,7 +481,10 @@ class _FoodBankState extends State<FoodBank> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => HomePage(key: homePageKey),
+                        builder: (context) => HomePage(
+                          key: homePageKey,
+                          cookies: widget.cookies,
+                        ),
                       ),
                     );
                   },

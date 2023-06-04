@@ -9,12 +9,16 @@ import 'dart:convert';
 import 'SubmitFunc.dart';
 import '/HomePage.dart';
 
-class Deck extends StatefulWidget {
+class Fun extends StatefulWidget {
+  final String cookies;
+
+  const Fun({Key? key, required this.cookies}) : super(key: key);
+
   @override
-  _DeckState createState() => _DeckState();
+  _FunState createState() => _FunState();
 }
 
-class _DeckState extends State<Deck> {
+class _FunState extends State<Fun> {
   //選擇人數變數
   String? radioValue = '1';
   final nameController = TextEditingController();
@@ -480,7 +484,10 @@ class _DeckState extends State<Deck> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => HomePage(key: homePageKey),
+                        builder: (context) => HomePage(
+                          key: homePageKey,
+                          cookies: widget.cookies,
+                        ),
                       ),
                     );
                   },
