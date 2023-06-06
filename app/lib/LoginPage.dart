@@ -48,6 +48,8 @@ class _LoginPageState extends State<LoginPage> {
       }
 
       cookies = response.headers['set-cookie'];
+      cookies = cookies[0];
+      cookies = cookies.split(';')[0];
       print(response.headers);
       print('////////////////////');
       print(cookies);

@@ -5,19 +5,39 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<User> fetchUser(cookies) async {
-  final response =
-      await http.get(Uri.parse('http://nckudagg.ddns.net/api/user/get-info'), headers: {'Cookie': cookies});
+  var lp = 'https://nckudagg.ddns.net';
+  var session = http.Client();
+  var loginHeaders = {'Cookie': '$cookies'};
+  var response = await session.get(Uri.parse(lp + '/api/user/get-info'),
+      headers: loginHeaders);
+
   if (response.statusCode == 200) {
-    return User.fromJson(json.decode(response.body));
+    print('Load User info successfully');
+    var protectedData = jsonDecode(response.body);
+    print(protectedData);
+    return User.fromJson(protectedData);
   } else if (response.statusCode == 401) {
     throw Exception('Unauthorized');
   } else {
     throw Exception('Failed to load User info');
   }
+  // print('%%%%%');
+  // print(cookies);
+  // var session = http.Client();
+  // var response =
+  //     await session.get(Uri.parse('http://nckudagg.ddns.net/api/user/get-info'), headers: {'Cookie': '$cookies'});
+  //
+  // if (response.statusCode == 200) {
+  //   return User.fromJson(json.decode(response.body));
+  // } else if (response.statusCode == 401) {
+  //   throw Exception('Unauthorized');
+  // } else {
+  //   throw Exception('Failed to load User info');
+  // }
 }
 
 class User {
-  final double? uid;
+  final int? uid;
   final String email;
   final String username;
   final String? picture_path;

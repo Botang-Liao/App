@@ -11,8 +11,11 @@ import 'ActivityFunc/SubmitFunc.dart';
 
 class HomePage extends StatefulWidget {
   final String cookies;
+  final bool showAlertDialog;
 
-  const HomePage({Key? key, required this.cookies}) : super(key: key);
+  const HomePage(
+      {Key? key, required this.cookies, this.showAlertDialog = false})
+      : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -35,6 +38,7 @@ class _HomePageState extends State<HomePage> {
     addFunIcon();
     addSportIcon();
     addFoodIcon();
+    // showCustomAlertDialog();//add listener
     futureUser = fetchUser(widget.cookies);
     super.initState();
     DefaultAssetBundle.of(context)
@@ -136,17 +140,29 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                       const SizedBox(height: 25),
-                      OutlinedButton.icon(
-                        style: ButtonStyle(
-                          textStyle: MaterialStateProperty.all<TextStyle>(
-                            TextStyle(color: Colors.black54),
+                      Container(
+                        alignment: Alignment.center,
+                        child: OutlinedButton.icon(
+                          style: ButtonStyle(
+                            textStyle: MaterialStateProperty.all<TextStyle>(
+                              TextStyle(color: Colors.black54),
+                            ),
                           ),
+                          label: Text('Join'),
+                          icon: const Icon(Icons.add, size: 18),
+                          onPressed: () {
+                            Navigator.pop(
+                                context); // Close the modal bottom sheet
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text('Have Fun !',
+                                        textAlign: TextAlign.center),
+                                  );
+                                });
+                          },
                         ),
-                        label: Text('Join'),
-                        icon: const Icon(Icons.add, size: 18),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
                       ),
                     ],
                   ),
@@ -220,17 +236,29 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                       const SizedBox(height: 25),
-                      OutlinedButton.icon(
-                        style: ButtonStyle(
-                          textStyle: MaterialStateProperty.all<TextStyle>(
-                            TextStyle(color: Colors.black54),
+                      Container(
+                        alignment: Alignment.center,
+                        child: OutlinedButton.icon(
+                          style: ButtonStyle(
+                            textStyle: MaterialStateProperty.all<TextStyle>(
+                              TextStyle(color: Colors.black54),
+                            ),
                           ),
+                          label: Text('Join'),
+                          icon: const Icon(Icons.add, size: 18),
+                          onPressed: () {
+                            Navigator.pop(
+                                context); // Close the modal bottom sheet
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text('Have Fun !',
+                                        textAlign: TextAlign.center),
+                                  );
+                                });
+                          },
                         ),
-                        label: Text('Join'),
-                        icon: const Icon(Icons.add, size: 18),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
                       ),
                     ],
                   ),
@@ -304,17 +332,30 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                       const SizedBox(height: 25),
-                      OutlinedButton.icon(
-                        style: ButtonStyle(
-                          textStyle: MaterialStateProperty.all<TextStyle>(
-                            TextStyle(color: Colors.black54),
+                      Container(
+                        // width: double.maxFinite,
+                        alignment: Alignment.center,
+                        child: OutlinedButton.icon(
+                          style: ButtonStyle(
+                            textStyle: MaterialStateProperty.all<TextStyle>(
+                              TextStyle(color: Colors.black54),
+                            ),
                           ),
+                          label: Text('Join'),
+                          icon: const Icon(Icons.add, size: 18),
+                          onPressed: () {
+                            Navigator.pop(
+                                context); // Close the modal bottom sheet
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text('Have Fun !',
+                                        textAlign: TextAlign.center),
+                                  );
+                                });
+                          },
                         ),
-                        label: Text('Join'),
-                        icon: const Icon(Icons.add, size: 18),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
                       ),
                     ],
                   ),
@@ -381,18 +422,37 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  //Add alertdialog if create activity sucessfully
+  @override
+  void showCustomAlertDialog() {
+    print('&&&&&&&&&&&&&&&&&&&&&&&&&&&func');
+    print(widget.showAlertDialog);
+    if (widget.showAlertDialog) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text(
+              "You've held an activity!",
+              textAlign: TextAlign.center,
+            ),
+          );
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     String name;
     String email;
-
+    // showCustomAlertDialog();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black87),
-        backgroundColor: Colors.white,
-        // on below line we have given title of app
-        // title: Text("APP"),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
         // icon on app bar
         actions: [
           IconButton(
@@ -400,13 +460,14 @@ class _HomePageState extends State<HomePage> {
             color: Colors.black87,
             onPressed: () {},
           ),
-          IconButton(
-            icon: const Icon(Icons.refresh_rounded),
-            color: Colors.black87,
-            onPressed: () {},
-          ),
+          // IconButton(
+          //   icon: const Icon(Icons.refresh_rounded),
+          //   color: Colors.black87,
+          //   onPressed: () {},
+          // ),
         ],
       ),
+      extendBodyBehindAppBar: true,
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.only(),
@@ -419,15 +480,55 @@ class _HomePageState extends State<HomePage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     // return Text(snapshot.data!.username);
-                    return UserAccountsDrawerHeader(
-                      accountName: Text(snapshot.data!.username,
-                          style: TextStyle(fontSize: 20)),
-                      accountEmail: Text(snapshot.data!.email,
-                          style: TextStyle(fontSize: 18)),
-                      currentAccountPicture: CircleAvatar(
-                        backgroundImage: AssetImage('assets/images/ya.jpg'),
+                    return DrawerHeader(
+                      decoration: BoxDecoration(
+                        color: Colors.black87,
                       ),
-                      currentAccountPictureSize: Size.fromRadius(35),
+                      padding: EdgeInsets.all(0),
+                      child: Container(
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 10,
+                            ),
+                            CircleAvatar(
+                              radius: 42,
+                              backgroundImage:
+                                  AssetImage('assets/images/ya.jpg'),
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              snapshot.data!.username,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              snapshot.data!.email,
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // accountName: Text(snapshot.data!.username,
+                      //     style: TextStyle(fontSize: 20)),
+                      // accountEmail: Text(snapshot.data!.email,
+                      //     style: TextStyle(fontSize: 18)),
+                      // currentAccountPicture: CircleAvatar(
+                      //   backgroundImage: AssetImage('assets/images/ya.jpg'),
+                      // ),
+                      // currentAccountPictureSize: Size.fromRadius(35),
                     );
                   } else if (snapshot.hasError) {
                     return Text('${snapshot.error}');

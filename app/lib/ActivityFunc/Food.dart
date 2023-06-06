@@ -149,19 +149,27 @@ class _FoodState extends State<Food> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black87),
-        backgroundColor: Colors.white,
-        title: const Text('Food'),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        // title: const Text('Fun'),
       ),
+      extendBodyBehindAppBar: true,
       body: Padding(
-        padding: const EdgeInsets.all(25.0), //調整介面內容與邊線距離
+        padding: const EdgeInsets.only(
+            top: 70,
+            bottom: 25,
+            left: 25,
+            right: 25), //all(25.0), //調整介面內容與邊線距離
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "New Activity",
-              style:
-                  TextStyle(color: Color.fromARGB(255, 10, 1, 0), fontSize: 35),
+            Center(
+              child: const Text(
+                "New Activity",
+                style: TextStyle(
+                    color: Color.fromARGB(255, 10, 1, 0), fontSize: 35),
+              ),
             ),
             const SizedBox(height: 20),
             //下拉式選單
@@ -207,7 +215,7 @@ class _FoodState extends State<Food> {
               ],
             ),
             //發起活動截止時間
-            const SizedBox(height: 10),
+            SizedBox(height: 10),
             const Text(
               "End Invite Time",
               style:
@@ -230,7 +238,6 @@ class _FoodState extends State<Food> {
                 suffixIcon: Icon(Icons.calendar_today),
               ),
             ),
-
             SizedBox(
               width: 15,
               height: 18,
@@ -253,65 +260,71 @@ class _FoodState extends State<Food> {
                 suffixIcon: Icon(Icons.calendar_today),
               ),
             ),
-
             SizedBox(
               width: 15,
+              height: 20,
             ),
-            const SizedBox(height: 20),
-
-            //活動地點
+            // Location
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             SingleChildScrollView(
-              clipBehavior: Clip.none,
+              padding: EdgeInsets.zero,
+              // clipBehavior: Clip.none,
               child: Column(
                 children: [
-                  SizedBox(width: 15, height: 10),
-                  SizedBox(
-                    height: 45,
-                    child: TextFormField(
-                      controller: ActivityLoca,
-                      focusNode: _focusNode,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.search),
-                        label: Text("Activity Location"),
-                        border: OutlineInputBorder(),
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-                      ),
-                      onChanged: (value) {
-                        setState(() {
-                          _isListVisible = true;
-                        });
-                      },
+                  // SizedBox(width: 15, height: 10),
+                  // SizedBox(
+                  //   height: 45,
+                  //   child:
+                  TextFormField(
+                    controller: ActivityLoca,
+                    focusNode: _focusNode,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.search),
+                      label: Text("Activity Location"),
+                      border: OutlineInputBorder(),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 12, horizontal: 15),
                     ),
+                    onChanged: (value) {
+                      setState(() {
+                        _isListVisible = true;
+                      });
+                    },
                   ),
+                  // ),
                   Visibility(
                     visible: _isListVisible,
-                    child: ListView.builder(
-                      physics: ScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: _placeList.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(_placeList[index]["description"]),
-                          onTap: () async {
-                            print(_placeList[index]["description"]);
-                            ActivityLoca.text =
-                                _placeList[index]["description"];
-                            setState(() {
-                              _isListVisible = false;
-                            });
-                            _focusNode.unfocus();
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: 150, // 設置最大高度
+                      ),
+                      child: ListView.builder(
+                        padding: EdgeInsets.only(top: 5),
+                        physics: ScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: _placeList.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(_placeList[index]["description"]),
+                            onTap: () async {
+                              print(_placeList[index]["description"]);
+                              ActivityLoca.text =
+                                  _placeList[index]["description"];
+                              setState(() {
+                                _isListVisible = false;
+                              });
+                              _focusNode.unfocus();
 
-                            var placeId = _placeList[index]['place_id'];
-                            var latLng = await getLatLng(placeId);
-                            print(
-                                'Latitude: ${latLng.latitude}, Longitude: ${latLng.longitude}');
-                            Latitude = latLng.latitude;
-                            Longitude = latLng.longitude;
-                          },
-                        );
-                      },
+                              var placeId = _placeList[index]['place_id'];
+                              var latLng = await getLatLng(placeId);
+                              print(
+                                  'Latitude: ${latLng.latitude}, Longitude: ${latLng.longitude}');
+                              Latitude = latLng.latitude;
+                              Longitude = latLng.longitude;
+                            },
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ],
@@ -478,18 +491,20 @@ class _FoodState extends State<Food> {
                         Note.text.toString(),
                         Latitude,
                         Longitude);
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => HomePage(
                           key: homePageKey,
                           cookies: widget.cookies,
+                          showAlertDialog: true,
                         ),
                       ),
                     );
                   },
                   child: Text(
-                    'Submit',
+                    'CREATE',
                     style: TextStyle(color: Colors.white, fontSize: 15),
                   ),
                 ),
