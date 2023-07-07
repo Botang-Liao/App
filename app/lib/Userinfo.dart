@@ -21,19 +21,7 @@ Future<User> fetchUser(cookies) async {
   } else {
     throw Exception('Failed to load User info');
   }
-  // print('%%%%%');
-  // print(cookies);
-  // var session = http.Client();
-  // var response =
-  //     await session.get(Uri.parse('http://nckudagg.ddns.net/api/user/get-info'), headers: {'Cookie': '$cookies'});
-  //
-  // if (response.statusCode == 200) {
-  //   return User.fromJson(json.decode(response.body));
-  // } else if (response.statusCode == 401) {
-  //   throw Exception('Unauthorized');
-  // } else {
-  //   throw Exception('Failed to load User info');
-  // }
+
 }
 
 class User {

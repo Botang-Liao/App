@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_in_flutter/drawerpage.dart';
@@ -8,14 +9,14 @@ import 'LoginPage.dart';
 import 'PickActPage.dart';
 import 'LogoutAuth.dart';
 import 'ActivityFunc/SubmitFunc.dart';
+import 'notification.dart';
+import 'Score/scorepage.dart';
 
 class HomePage extends StatefulWidget {
   final String cookies;
-  final bool showAlertDialog;
+  // final bool showAlertDialog;
 
-  const HomePage(
-      {Key? key, required this.cookies, this.showAlertDialog = false})
-      : super(key: key);
+  const HomePage({Key? key, required this.cookies}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -38,7 +39,6 @@ class _HomePageState extends State<HomePage> {
     addFunIcon();
     addSportIcon();
     addFoodIcon();
-    // showCustomAlertDialog();//add listener
     futureUser = fetchUser(widget.cookies);
     super.initState();
     DefaultAssetBundle.of(context)
@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
               return Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Container(
-                  height: 600.0,
+                  height: 800.0,
                   color: Colors.white,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -106,37 +106,62 @@ class _HomePageState extends State<HomePage> {
                       ),
                       const SizedBox(height: 25),
                       Text(
-                        "Distance: xxx m",
+                        "  Distance:  100 m",
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                      ),
+                      // const SizedBox(height: 15),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton(
+                          onPressed: () {
+                            // Action when TextButton is pressed
+                            showOrganizerScore(context);
+                          },
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Organizer: ",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              Text(
+                                "呂亞縉",
+                                style: TextStyle(
+                                  color: Colors.deepPurple,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // const SizedBox(height: 15),
+                      Text(
+                        "  Remaining time:  25 min",
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                       const SizedBox(height: 15),
                       Text(
-                        "Organizer: 呂亞縉",
+                        "  Fee:  NTD $LowerEstCost ~ NTD $UpperEstCost",
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                       const SizedBox(height: 15),
                       Text(
-                        "Remaining time: xxx min",
+                        "  Address:  $ActLoca",
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                       const SizedBox(height: 15),
                       Text(
-                        "Fee: NTD $LowerEstCost ~ NTD $UpperEstCost",
+                        "  Remaining:  30 min to start activities",
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                       const SizedBox(height: 15),
                       Text(
-                        "Address: $ActLoca",
-                        style: TextStyle(color: Colors.black, fontSize: 15),
-                      ),
-                      const SizedBox(height: 15),
-                      Text(
-                        "Remaining: xxx min to start activities",
-                        style: TextStyle(color: Colors.black, fontSize: 15),
-                      ),
-                      const SizedBox(height: 15),
-                      Text(
-                        "Note: $Note",
+                        "  Note:  $Note",
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                       const SizedBox(height: 25),
@@ -190,7 +215,7 @@ class _HomePageState extends State<HomePage> {
               return Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Container(
-                  height: 600.0,
+                  height: 800.0,
                   color: Colors.white,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -202,37 +227,62 @@ class _HomePageState extends State<HomePage> {
                       ),
                       const SizedBox(height: 25),
                       Text(
-                        "Distance: xxx m",
+                        "  Distance:  100 m",
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                      ),
+                      // const SizedBox(height: 15),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton(
+                          onPressed: () {
+                            // Action when TextButton is pressed
+                            showOrganizerScore(context);
+                          },
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Organizer: ",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              Text(
+                                "呂亞縉",
+                                style: TextStyle(
+                                  color: Colors.deepPurple,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // const SizedBox(height: 15),
+                      Text(
+                        "  Remaining time:  25 min",
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                       const SizedBox(height: 15),
                       Text(
-                        "Organizer: 呂亞縉",
+                        "  Fee:  NTD $LowerEstCost ~ NTD $UpperEstCost",
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                       const SizedBox(height: 15),
                       Text(
-                        "Remaining time: xxx min",
+                        "  Address:  $ActLoca",
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                       const SizedBox(height: 15),
                       Text(
-                        "Fee: NTD $LowerEstCost ~ NTD $UpperEstCost",
+                        "  Remaining:  30 min to start activities",
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                       const SizedBox(height: 15),
                       Text(
-                        "Address: $ActLoca",
-                        style: TextStyle(color: Colors.black, fontSize: 15),
-                      ),
-                      const SizedBox(height: 15),
-                      Text(
-                        "Remaining: xxx min to start activities",
-                        style: TextStyle(color: Colors.black, fontSize: 15),
-                      ),
-                      const SizedBox(height: 15),
-                      Text(
-                        "Note: $Note",
+                        "  Note:  $Note",
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                       const SizedBox(height: 25),
@@ -286,7 +336,7 @@ class _HomePageState extends State<HomePage> {
               return Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Container(
-                  height: 600.0,
+                  height: 800.0,
                   color: Colors.white,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -298,42 +348,66 @@ class _HomePageState extends State<HomePage> {
                       ),
                       const SizedBox(height: 25),
                       Text(
-                        "Distance: xxx m",
+                        "  Distance:  100 m",
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                      ),
+                      // const SizedBox(height: 15),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton(
+                          onPressed: () {
+                            // Action when TextButton is pressed
+                            showOrganizerScore(context);
+                          },
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Organizer: ",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              Text(
+                                "呂亞縉",
+                                style: TextStyle(
+                                  color: Colors.deepPurple,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // const SizedBox(height: 15),
+                      Text(
+                        "  Remaining time:  25 min",
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                       const SizedBox(height: 15),
                       Text(
-                        "Organizer: 呂亞縉",
+                        "  Fee:  NTD $LowerEstCost ~ NTD $UpperEstCost",
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                       const SizedBox(height: 15),
                       Text(
-                        "Remaining time: xxx min",
+                        "  Address:  $ActLoca",
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                       const SizedBox(height: 15),
                       Text(
-                        "Fee: NTD $LowerEstCost ~ NTD $UpperEstCost",
+                        "  Remaining:  30 min to start activities",
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                       const SizedBox(height: 15),
                       Text(
-                        "Address: $ActLoca",
-                        style: TextStyle(color: Colors.black, fontSize: 15),
-                      ),
-                      const SizedBox(height: 15),
-                      Text(
-                        "Remaining: xxx min to start activities",
-                        style: TextStyle(color: Colors.black, fontSize: 15),
-                      ),
-                      const SizedBox(height: 15),
-                      Text(
-                        "Note: $Note",
+                        "  Note:  $Note",
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                       const SizedBox(height: 25),
                       Container(
-                        // width: double.maxFinite,
                         alignment: Alignment.center,
                         child: OutlinedButton.icon(
                           style: ButtonStyle(
@@ -422,31 +496,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  //Add alertdialog if create activity sucessfully
-  @override
-  void showCustomAlertDialog() {
-    print('&&&&&&&&&&&&&&&&&&&&&&&&&&&func');
-    print(widget.showAlertDialog);
-    if (widget.showAlertDialog) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: Text(
-              "You've held an activity!",
-              textAlign: TextAlign.center,
-            ),
-          );
-        },
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     String name;
     String email;
-    // showCustomAlertDialog();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -458,7 +511,14 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: const Icon(Icons.notifications_rounded),
             color: Colors.black87,
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return MyAlertDialog();
+                },
+              );
+            },
           ),
           // IconButton(
           //   icon: const Icon(Icons.refresh_rounded),
@@ -469,6 +529,7 @@ class _HomePageState extends State<HomePage> {
       ),
       extendBodyBehindAppBar: true,
       drawer: Drawer(
+        key: GlobalKey(),
         child: ListView(
           padding: EdgeInsets.only(),
           children: [
@@ -479,7 +540,6 @@ class _HomePageState extends State<HomePage> {
                 future: futureUser,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    // return Text(snapshot.data!.username);
                     return DrawerHeader(
                       decoration: BoxDecoration(
                         color: Colors.black87,
@@ -543,6 +603,28 @@ class _HomePageState extends State<HomePage> {
               // currentAccountPicture: CircleAvatar(
               //   backgroundImage: AssetImage('assets/images/ya.jpg'),
               // ),
+            ),
+
+            Padding(
+              padding: EdgeInsets.only(
+                  left: 8.0, right: 8.0, bottom: 3.0), //調整資訊方塊與邊界距離
+              child: SizedBox(
+                  height: 40,
+                  //搜尋方框
+                  child: TextField(
+                    controller: Search_controller,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.search),
+                      suffixIcon: IconButton(
+                        onPressed: () {},
+                        icon: Icon(Icons.mic_rounded),
+                      ),
+                      label: Text("Search"),
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 15, horizontal: 15), // <-- SEE HERE
+                    ),
+                  )),
             ),
 
             ListTile(
@@ -615,6 +697,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: Stack(
+        key: GlobalKey(),
         children: [
           Container(
             child: SafeArea(
@@ -644,6 +727,7 @@ class _HomePageState extends State<HomePage> {
           Align(
             alignment: Alignment(0.96, 0.65),
             child: FloatingActionButton.small(
+              heroTag: 'my_location',
               child: Icon(
                 Icons.my_location_rounded,
                 color: Colors.white,
@@ -684,6 +768,7 @@ class _HomePageState extends State<HomePage> {
           Align(
             alignment: Alignment(0.96, 0.5),
             child: FloatingActionButton.small(
+              heroTag: 'add_act',
               child: Icon(
                 Icons.add_rounded,
                 color: Colors.white,

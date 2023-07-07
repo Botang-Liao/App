@@ -28,6 +28,8 @@ dependencies:
   search_map_place_updated: ^0.0.4
   uuid: ^3.0.7
   page_transition: ^2.0.9
+  basic_utils: ^5.5.4
+  flutter_rating_native: ^0.0.2
 
 
 dev_dependencies:
@@ -49,6 +51,7 @@ flutter:
     - assets/images/Sport.png
     - assets/images/Food.png
     - assets/images/logo.jpg
+    - assets/images/jenny.png
 
 android:
   useAndroidX: true

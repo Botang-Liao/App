@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // 用於日期格式化
+import 'package:basic_utils/basic_utils.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:uuid/uuid.dart';
@@ -19,6 +20,7 @@ class Food extends StatefulWidget {
 }
 
 class _FoodState extends State<Food> {
+  final _formKey = GlobalKey<FormState>();
   //選擇人數變數
   String? radioValue = '1';
   final nameController = TextEditingController();
@@ -160,359 +162,453 @@ class _FoodState extends State<Food> {
             bottom: 25,
             left: 25,
             right: 25), //all(25.0), //調整介面內容與邊線距離
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: const Text(
-                "New Activity",
-                style: TextStyle(
-                    color: Color.fromARGB(255, 10, 1, 0), fontSize: 35),
-              ),
-            ),
-            const SizedBox(height: 20),
-            //下拉式選單
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                DropdownButton<String>(
-                  value: dropdownValue,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      dropdownValue = newValue!;
-                    });
-                  },
-                  items: <String>[
-                    'Spare Food',
-                    'Looking for a Friend',
-                    "Group Buying",
-                  ].map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: const Text(
+                  "New Activity",
+                  style: TextStyle(
+                      color: Color.fromARGB(255, 10, 1, 0), fontSize: 35),
                 ),
-                //活動名稱
-                SizedBox(
-                  width: 15,
-                ),
-                Expanded(
-                  child: SizedBox(
-                    height: 40,
-                    child: TextFormField(
-                      controller: ActivityName,
-                      decoration: InputDecoration(
-                        label: Text("Activity Name"),
-                        border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 15, horizontal: 15), // <-- SEE HEREHERE
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            //發起活動截止時間
-            SizedBox(height: 10),
-            const Text(
-              "End Invite Time",
-              style:
-                  TextStyle(color: Color.fromARGB(255, 10, 1, 0), fontSize: 15),
-            ),
-
-            SizedBox(
-              width: 18,
-            ),
-
-            TextFormField(
-              controller: EndInviteTime,
-              readOnly: true,
-              onTap: () {
-                _selectTime(context, EndInviteTime);
-              },
-              decoration: InputDecoration(
-                //labelText: 'Choose Date and Time', //選擇第一個日期與時間
-                labelStyle: TextStyle(fontSize: 10),
-                suffixIcon: Icon(Icons.calendar_today),
               ),
-            ),
-            SizedBox(
-              width: 15,
-              height: 18,
-            ),
-            //活動開始時間
-            const Text(
-              "Activity Start Time",
-              style:
-                  TextStyle(color: Color.fromARGB(255, 10, 1, 0), fontSize: 15),
-            ),
-            TextFormField(
-              controller: StartTime,
-              readOnly: true,
-              onTap: () {
-                _selectTime(context, StartTime);
-              },
-              decoration: InputDecoration(
-                //labelText: 'Choose Date and Time', //選擇第二個日期與時間
-                labelStyle: TextStyle(fontSize: 6),
-                suffixIcon: Icon(Icons.calendar_today),
-              ),
-            ),
-            SizedBox(
-              width: 15,
-              height: 20,
-            ),
-            // Location
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            SingleChildScrollView(
-              padding: EdgeInsets.zero,
-              // clipBehavior: Clip.none,
-              child: Column(
+              const SizedBox(height: 20),
+              //下拉式選單
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  // SizedBox(width: 15, height: 10),
-                  // SizedBox(
-                  //   height: 45,
-                  //   child:
-                  TextFormField(
-                    controller: ActivityLoca,
-                    focusNode: _focusNode,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.search),
-                      label: Text("Activity Location"),
-                      border: OutlineInputBorder(),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-                    ),
-                    onChanged: (value) {
+                  DropdownButton<String>(
+                    value: dropdownValue,
+                    onChanged: (String? newValue) {
                       setState(() {
-                        _isListVisible = true;
+                        dropdownValue = newValue!;
                       });
                     },
+                    items: <String>[
+                      'Spare Food',
+                      'Looking for a Friend',
+                      "Group Buying",
+                    ].map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
                   ),
-                  // ),
-                  Visibility(
-                    visible: _isListVisible,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxHeight: 150, // 設置最大高度
-                      ),
-                      child: ListView.builder(
-                        padding: EdgeInsets.only(top: 5),
-                        physics: ScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: _placeList.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text(_placeList[index]["description"]),
-                            onTap: () async {
-                              print(_placeList[index]["description"]);
-                              ActivityLoca.text =
-                                  _placeList[index]["description"];
-                              setState(() {
-                                _isListVisible = false;
-                              });
-                              _focusNode.unfocus();
-
-                              var placeId = _placeList[index]['place_id'];
-                              var latLng = await getLatLng(placeId);
-                              print(
-                                  'Latitude: ${latLng.latitude}, Longitude: ${latLng.longitude}');
-                              Latitude = latLng.latitude;
-                              Longitude = latLng.longitude;
-                            },
-                          );
+                  //活動名稱
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Expanded(
+                    child: SizedBox(
+                      height: 55,
+                      child: TextFormField(
+                        controller: ActivityName,
+                        decoration: InputDecoration(
+                          label: Text("Activity Name"),
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 15), // <-- SEE HEREHERE
+                          errorStyle: TextStyle(fontSize: 9.5),
+                          errorMaxLines: 1,
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please fill in the information';
+                          }
+                          return null;
                         },
                       ),
                     ),
                   ),
                 ],
               ),
-            ),
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            const SizedBox(height: 15),
-            //人數點選
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Text(
-                  "People Limit",
-                  style: TextStyle(
-                      color: Color.fromARGB(255, 8, 1, 0), fontSize: 15),
+              //發起活動截止時間
+              SizedBox(height: 10),
+              const Text(
+                "End Invite Time",
+                style: TextStyle(
+                    color: Color.fromARGB(255, 10, 1, 0), fontSize: 15),
+              ),
+
+              SizedBox(
+                width: 18,
+              ),
+
+              TextFormField(
+                controller: EndInviteTime,
+                readOnly: true,
+                onTap: () {
+                  _selectTime(context, EndInviteTime);
+                },
+                decoration: InputDecoration(
+                  //labelText: 'Choose Date and Time', //選擇第一個日期與時間
+                  labelStyle: TextStyle(fontSize: 10),
+                  suffixIcon: Icon(Icons.calendar_today),
                 ),
-                Radio<String>(
-                  value: "1",
-                  activeColor: Colors.black87,
-                  groupValue: radioValue,
-                  onChanged: (value) {
-                    PeopleLimit = value.toString();
-                    setState(() {
-                      radioValue = value!;
-                    });
-                  },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please fill in the information';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(
+                width: 15,
+                height: 18,
+              ),
+              //活動開始時間
+              const Text(
+                "Activity Start Time",
+                style: TextStyle(
+                    color: Color.fromARGB(255, 10, 1, 0), fontSize: 15),
+              ),
+              TextFormField(
+                controller: StartTime,
+                readOnly: true,
+                onTap: () {
+                  _selectTime(context, StartTime);
+                },
+                decoration: InputDecoration(
+                  //labelText: 'Choose Date and Time', //選擇第二個日期與時間
+                  labelStyle: TextStyle(fontSize: 6),
+                  suffixIcon: Icon(Icons.calendar_today),
                 ),
-                Text("1"),
-                ////////////////////////////////////////
-                Radio<String>(
-                  value: "2",
-                  activeColor: Colors.black87,
-                  groupValue: radioValue,
-                  onChanged: (value) {
-                    PeopleLimit = value.toString();
-                    setState(() {
-                      radioValue = value!;
-                    });
-                  },
-                ),
-                Text("2"),
-                ///////////////////////////////////////
-                Radio<String>(
-                  value: "3",
-                  activeColor: Colors.black87,
-                  groupValue: radioValue,
-                  onChanged: (value) {
-                    setState(() {
-                      radioValue = value!;
-                    });
-                  },
-                ),
-                //其他人數填入方框
-                SizedBox(
-                  width: MediaQuery.of(context).size.width / 4,
-                  child: SizedBox(
-                    height: 32,
-                    child: TextFormField(
-                      controller: PeopleLimitcontroller,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please fill in the information';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(
+                width: 15,
+                height: 20,
+              ),
+              // Location
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+              SingleChildScrollView(
+                padding: EdgeInsets.zero,
+                // clipBehavior: Clip.none,
+                child: Column(
+                  children: [
+                    // SizedBox(width: 15, height: 10),
+                    // SizedBox(
+                    //   height: 45,
+                    //   child:
+                    TextFormField(
+                      controller: ActivityLoca,
+                      focusNode: _focusNode,
                       decoration: InputDecoration(
-                        label: Text("Limit"),
+                        prefixIcon: Icon(Icons.search),
+                        label: Text("Activity Location"),
                         border: OutlineInputBorder(),
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 15), // <-- SEE HERE
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 12, horizontal: 15),
                       ),
                       onChanged: (value) {
                         setState(() {
-                          // Assign the value of the TextFormField to the PeopleLimit variable
-                          PeopleLimit = value;
+                          _isListVisible = true;
                         });
                       },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          Latitude = 0.0;
+                          Longitude = 0.0;
+                          return 'Please fill in the information';
+                        }
+                        return null;
+                      },
+                    ),
+                    // ),
+                    Visibility(
+                      visible: _isListVisible,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxHeight: 150, // 設置最大高度
+                        ),
+                        child: ListView.builder(
+                          padding: EdgeInsets.only(top: 5),
+                          physics: ScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: _placeList.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text(_placeList[index]["description"]),
+                              onTap: () async {
+                                print(_placeList[index]["description"]);
+                                ActivityLoca.text =
+                                    _placeList[index]["description"];
+                                setState(() {
+                                  _isListVisible = false;
+                                });
+                                _focusNode.unfocus();
+
+                                var placeId = _placeList[index]['place_id'];
+                                var latLng = await getLatLng(placeId);
+                                print(
+                                    'Latitude: ${latLng.latitude}, Longitude: ${latLng.longitude}');
+                                Latitude = latLng.latitude;
+                                Longitude = latLng.longitude;
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+              const SizedBox(height: 15),
+              //人數點選
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Text(
+                    "People Limit",
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 8, 1, 0), fontSize: 15),
+                  ),
+                  Radio<String>(
+                    value: "1",
+                    activeColor: Colors.black87,
+                    groupValue: radioValue,
+                    onChanged: (value) {
+                      // PeopleLimit = value.toString();
+                      setState(() {
+                        radioValue = value!;
+                        PeopleLimit = value;
+                      });
+                    },
+                  ),
+                  Text("1"),
+                  ////////////////////////////////////////
+                  Radio<String>(
+                    value: "2",
+                    activeColor: Colors.black87,
+                    groupValue: radioValue,
+                    onChanged: (value) {
+                      // PeopleLimit = value.toString();
+                      setState(() {
+                        radioValue = value!;
+                        PeopleLimit = value;
+                      });
+                    },
+                  ),
+                  Text("2"),
+                  ///////////////////////////////////////
+                  Radio<String>(
+                    value: "3",
+                    activeColor: Colors.black87,
+                    groupValue: radioValue,
+                    onChanged: (value) {
+                      setState(() {
+                        radioValue = value!;
+                      });
+                    },
+                  ),
+                  //其他人數填入方框
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 4,
+                    child: SizedBox(
+                      height: 32,
+                      child: TextFormField(
+                        controller: PeopleLimitcontroller,
+                        decoration: InputDecoration(
+                          label: Text("Limit"),
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 15), // <-- SEE HERE
+                          // errorMaxLines: 2,
+                          // errorStyle: TextStyle(fontSize: 8.5)
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            // Assign the value of the TextFormField to the PeopleLimit variable
+                            PeopleLimit = value;
+                          });
+                        },
+                        // validator: (value) {
+                        //   if (value == null || value.isEmpty) {
+                        //     return 'Please fill in the information';
+                        //   }
+                        //   if (value != int) {
+                        //     return 'Please enter a valid number format';
+                        //   }
+                        //   return null;
+                        // },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 15),
+              //預算花費
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const SizedBox(height: 20),
+                  // SizedBox(width: 15),
+                  Expanded(
+                    child: SizedBox(
+                        height: 40,
+                        child: TextFormField(
+                          controller: LowerEstimatedCost,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.attach_money),
+                            label: Text("Lower Cost"),
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 15), // <-- SEE HERE //
+                            errorMaxLines: 2,
+                          ),
+                          // validator: (value) {
+                          //   if (value == null || value.isEmpty) {
+                          //     return 'Please enter a valid number format';
+                          //   }
+                          //   return null;
+                          // },
+                        )),
+                  ),
+                  SizedBox(width: 15),
+                  const Text(
+                      style: TextStyle(fontFamily: 'Mononoki', fontSize: 30.0),
+                      "~"),
+                  SizedBox(width: 15),
+                  Expanded(
+                    child: SizedBox(
+                        height: 40,
+                        child: TextFormField(
+                          controller: UpperEstimatedCost,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.attach_money),
+                            label: Text("Upper Cost"),
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 15), // <-- SEE HERE //
+                            errorMaxLines: 2,
+                          ),
+                          // validator: (value) {
+                          //   if (value != null && value != int) {
+                          //     return 'Please enter a valid number format';
+                          //   }
+                          //   return null;
+                          // },
+                        )),
+                  ),
+                ],
+              ),
+              //備註
+              const SizedBox(height: 10),
+              SizedBox(
+                height: 60,
+                child: TextFormField(
+                  controller: Note,
+                  decoration: InputDecoration(
+                    label: Text("Note"),
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 15), // <-- SEE HERE //
+                    errorMaxLines: 2,
+                  ),
+                ),
+              ),
+              //發起按鈕
+              Center(
+                child: Container(
+                  height: 40,
+                  width: 100,
+                  decoration: BoxDecoration(
+                      color: Colors.black87,
+                      borderRadius: BorderRadius.circular(15)),
+                  child: TextButton(
+                    onPressed: () async {
+                      print('onpress');
+                      if (_formKey.currentState!.validate()) {
+                        print('submit');
+                        await Submit(
+                            context,
+                            widget.cookies,
+                            3,
+                            ActivityName.text.toString(),
+                            datetimeToInteger(EndInviteTime.text.toString()),
+                            datetimeToInteger(StartTime.text.toString()),
+                            ActivityLoca.text.toString(),
+                            int.tryParse(PeopleLimit) ?? 0,
+                            int.tryParse(LowerEstimatedCost.text.toString()) ?? 0,
+                            int.tryParse(UpperEstimatedCost.text.toString()) ?? 0,
+                            int.tryParse(PeopleLimit) ?? 0,
+                            Latitude,
+                            Longitude,
+                            note: Note.text.toString());
+
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text("You've held an activity!",
+                                    textAlign: TextAlign.center),
+                              );
+                            });
+                        // Delay for five seconds
+                        await Future.delayed(Duration(seconds: 1));
+
+                        // Close the dialog
+                        Navigator.pop(context);
+
+                        homePageKey.currentState?.addFoodMarker(
+                            ActivityName.text.toString(),
+                            EndInviteTime.text.toString(),
+                            StartTime.text.toString(),
+                            ActivityLoca.text.toString(),
+                            PeopleLimit,
+                            LowerEstimatedCost.text.toString(),
+                            UpperEstimatedCost.text.toString(),
+                            Note.text.toString(),
+                            Latitude,
+                            Longitude);
+                        print('add marker ok');
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomePage(
+                              key: homePageKey,
+                              cookies: widget.cookies,
+                              // showAlertDialog: true,
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    child: Text(
+                      'CREATE',
+                      style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                   ),
                 ),
-              ],
-            ),
-
-            const SizedBox(height: 15),
-            //預算花費
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const SizedBox(height: 20),
-                // SizedBox(width: 15),
-                Expanded(
-                  child: SizedBox(
-                      height: 40,
-                      child: TextFormField(
-                        controller: LowerEstimatedCost,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.attach_money),
-                          label: Text("Lower Cost"),
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 15), // <-- SEE HERE //
-                        ),
-                      )),
-                ),
-                SizedBox(width: 15),
-                const Text(
-                    style: TextStyle(fontFamily: 'Mononoki', fontSize: 30.0),
-                    "~"),
-                SizedBox(width: 15),
-                Expanded(
-                  child: SizedBox(
-                      height: 40,
-                      child: TextFormField(
-                        controller: UpperEstimatedCost,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.attach_money),
-                          label: Text("Upper Cost"),
-                          border: OutlineInputBorder(),
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 15), // <-- SEE HERE //
-                        ),
-                      )),
-                ),
-              ],
-            ),
-            //備註
-            const SizedBox(height: 10),
-            SizedBox(
-              height: 60,
-              child: TextFormField(
-                controller: Note,
-                decoration: InputDecoration(
-                  label: Text("Note"),
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(
-                      vertical: 10, horizontal: 15), // <-- SEE HERE //
-                ),
               ),
-            ),
-            //發起按鈕
-            Center(
-              child: Container(
-                height: 40,
-                width: 100,
-                decoration: BoxDecoration(
-                    color: Colors.black87,
-                    borderRadius: BorderRadius.circular(15)),
-                child: TextButton(
-                  onPressed: () {
-                    Submit(
-                        context,
-                        ActivityName.text.toString(),
-                        EndInviteTime.text.toString(),
-                        StartTime.text.toString(),
-                        ActivityLoca.text.toString(),
-                        PeopleLimit.toString(),
-                        LowerEstimatedCost.text.toString(),
-                        UpperEstimatedCost.text.toString(),
-                        Note.text.toString(),
-                        Latitude,
-                        Longitude);
-                    homePageKey.currentState?.addFoodMarker(
-                        ActivityName.text.toString(),
-                        EndInviteTime.text.toString(),
-                        StartTime.text.toString(),
-                        ActivityLoca.text.toString(),
-                        PeopleLimit.toString(),
-                        LowerEstimatedCost.text.toString(),
-                        UpperEstimatedCost.text.toString(),
-                        Note.text.toString(),
-                        Latitude,
-                        Longitude);
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomePage(
-                          key: homePageKey,
-                          cookies: widget.cookies,
-                          showAlertDialog: true,
-                        ),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'CREATE',
-                    style: TextStyle(color: Colors.white, fontSize: 15),
-                  ),
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
+}
+
+int datetimeToInteger(String str_time) {
+  DateFormat format = DateFormat("yyyy-MM-dd HH:mm");
+  DateTime time = format.parse(str_time);
+  print(time);
+  print(time);
+  int timestamp = time.millisecondsSinceEpoch ~/ 1000;
+  print(timestamp);
+  return timestamp;
 }

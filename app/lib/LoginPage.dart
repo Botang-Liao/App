@@ -58,47 +58,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-// class _LoginPageState extends State<LoginPage> {
-//   final _formKey = GlobalKey<FormState>();
-//   // final _scrollController = ScrollController();
-//   TextEditingController emailController = TextEditingController();
-//   TextEditingController passwordController = TextEditingController();
-
-//   void Login(String email, password) async {
-//     try {
-//       final url = Uri.parse('https://nckudagg.ddns.net/api/auth/login');
-
-//       var bodyyy = jsonEncode({
-//         'email': email,
-//         'password': password,
-//       });
-
-//       final response = await http.post(url,
-//           headers: {'Content-Type': 'application/json'}, body: bodyyy);
-
-//       if (response.statusCode == 200) {
-//         if (response.body.isNotEmpty) {
-//           var data = jsonDecode(response.body.toString());
-//           print(data);
-//           print('Login successfully');
-//           // Navigator.pop(
-//           //     context, MaterialPageRoute(builder: (_) => HomePage()));
-//         }
-//       } else if (response.statusCode == 401) {
-//         print('Unauthorized');
-//       } else {
-//         print(response.statusCode);
-//         print('failed');
-//       }
-
-//       // var cookies = response.headers['set-cookie'];
-//       print(response.headers.keys.toList());
-//       print(response.headers.values.toList());
-//     } catch (e) {
-//       print(e.toString());
-//     }
-//   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -205,7 +164,10 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) => HomePage(key: homePageKey, cookies: cookies,)));
+                              builder: (_) => HomePage(
+                                    key: homePageKey,
+                                    cookies: cookies,
+                                  )));
                     }
                   },
                   child: Text(

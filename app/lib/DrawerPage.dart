@@ -15,20 +15,20 @@ class _DrawerPageState extends State<DrawerPage> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Basketball'),
-          actions: <Widget>[
-            //通知功能位置
-            IconButton(
-              icon: Icon(Icons.notifications),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return MyAlertDialog();
-                  },
-                );
-              },
-            ),
-          ],
+          // actions: <Widget>[
+          //   //通知功能位置
+          //   IconButton(
+          //     icon: Icon(Icons.notifications),
+          //     onPressed: () {
+          //       showDialog(
+          //         context: context,
+          //         builder: (BuildContext context) {
+          //           return MyAlertDialog();
+          //         },
+          //       );
+          //     },
+          //   ),
+          // ],
         ),
         body: Column(
           children: [
@@ -49,20 +49,59 @@ class _DrawerPageState extends State<DrawerPage> {
                   )),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: 10,
+              child: ListView.separated(
+                itemCount: 4,
+                separatorBuilder: (BuildContext context, int index) =>
+                    SizedBox(height: 3),
                 itemBuilder: (BuildContext context, int index) {
+                  String local;
+                  int distance;
+                  int remainingTime;
+                  int cost;
+                  int numOfPersons;
+                  int total;
+
+                  if (index == 0) {
+                    local = '成功大學';
+                    distance = 10;
+                    remainingTime = 30;
+                    cost = 20;
+                    numOfPersons = 4;
+                    total = 10;
+                  } else if (index == 1) {
+                    local = '成功大學光復校區';
+                    distance = 250;
+                    remainingTime = 15;
+                    cost = 20;
+                    numOfPersons = 7;
+                    total = 10;
+                  } else if (index == 2) {
+                    local = '成功大學自強校區';
+                    distance = 750;
+                    remainingTime = 25;
+                    cost = 20;
+                    numOfPersons = 3;
+                    total = 10;
+                  } else {
+                    local = '台南體育館';
+                    distance = 3700;
+                    remainingTime = 45;
+                    cost = 100;
+                    numOfPersons = 8;
+                    total = 10;
+                  }
+
                   return _buildItem(
-                    local: 'Los Angeles',
-                    distance: 10,
-                    remainingTime: 30,
-                    cost: 20,
-                    numOfPersons: 4,
-                    total: 10,
+                    local: local,
+                    distance: distance,
+                    remainingTime: remainingTime,
+                    cost: cost,
+                    numOfPersons: numOfPersons,
+                    total: total,
                   );
                 },
               ),
-            )
+            ),
           ],
         ));
   }
